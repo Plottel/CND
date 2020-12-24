@@ -1,0 +1,9 @@
+﻿namespace Deft.Input
+{
+    public enum InputType
+    {
+        Button = 0,
+        Axis = 1
+    }
+}
+
