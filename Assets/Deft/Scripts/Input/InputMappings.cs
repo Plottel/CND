@@ -38,5 +38,18 @@
             "middleButton",
             "rightButton"
         };
+
+        public static string[] GamepadControlIDs { get; } = new string[]
+        {
+            "buttonSouth",
+            "buttonNorth",
+            "buttonWest",
+            "buttonEast",
+            "leftStick",
+            "leftStick/up",
+            "leftStick/down",
+            "leftStick/left",
+            "leftStick/right"
+        };
     }
 }

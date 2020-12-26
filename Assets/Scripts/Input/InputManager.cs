@@ -30,29 +30,47 @@ public class InputManager : DeftInputManager
         SetActiveScheme(InputScheme.Gameplay);
     }
 
-    void SetupInputReaders()
-    {
-        mkbReader = new PlayerMKBInputReader(mouse, kb);
-        gamepadReader = new PlayerGamepadInputReader(gamepad);
-
-        foreach (string id in InputMappings.KeyboardControlIDs)
-            mkbReader.AddInputControl(kb.GetChildControl(id));
-
-        foreach (string id in InputMappings.MouseControlIDs)
-            mkbReader.AddInputControl(mouse.GetChildControl(id));
-
-        mkbReader.BindAction(PlayerActions.Movement, "a", Direction.Left);
-        mkbReader.BindAction(PlayerActions.Movement, "d", Direction.Right);
-        mkbReader.BindAction(PlayerActions.Movement, "w", Direction.Up);
-        mkbReader.BindAction(PlayerActions.Movement, "s", Direction.Down);
-        mkbReader.BindAction(PlayerActions.Primary, "leftButton");
-    }
-
     public override void OnUpdate()
     {
         base.OnUpdate();
 
         //if (kb.gKey.wasPressedThisFrame) SetActiveScheme(InputScheme.Gameplay);
         //if (kb.uKey.wasPressedThisFrame) SetActiveScheme(InputScheme.UI);
+    }
+
+    void SetupInputReaders()
+    {
+        mkbReader = new PlayerMKBInputReader(mouse, kb);
+        gamepadReader = new PlayerGamepadInputReader(gamepad);
+
+        SetupMKBInputReader(mkbReader);
+        SetupGamepadInputReader(gamepadReader);
+    }
+
+    void SetupMKBInputReader(PlayerMKBInputReader reader)
+    {
+        foreach (string id in InputMappings.KeyboardControlIDs)
+            reader.AddInputControl(kb.GetChildControl(id));
+
+        foreach (string id in InputMappings.MouseControlIDs)
+            reader.AddInputControl(mouse.GetChildControl(id));
+
+        reader.BindAction(PlayerActions.Movement, "a", Direction.Left);
+        reader.BindAction(PlayerActions.Movement, "d", Direction.Right);
+        reader.BindAction(PlayerActions.Movement, "w", Direction.Up);
+        reader.BindAction(PlayerActions.Movement, "s", Direction.Down);
+        reader.BindAction(PlayerActions.Primary, "leftButton");
+    }
+
+    void SetupGamepadInputReader(PlayerGamepadInputReader reader)
+    {
+        foreach (string id in InputMappings.GamepadControlIDs)
+            reader.AddInputControl(gamepad.GetChildControl(id));
+
+        reader.BindAction(PlayerActions.Movement, "leftStick/left", Direction.Left);
+        reader.BindAction(PlayerActions.Movement, "leftStick/right", Direction.Right);
+        reader.BindAction(PlayerActions.Movement, "leftStick/up", Direction.Up);
+        reader.BindAction(PlayerActions.Movement, "leftStick/down", Direction.Down);
+        reader.BindAction(PlayerActions.Primary, "buttonSouth");
     }
 }

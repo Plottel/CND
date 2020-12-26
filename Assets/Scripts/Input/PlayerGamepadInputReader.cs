@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,33 +10,8 @@ public class PlayerGamepadInputReader : PlayerInputReader
 {
     private Gamepad gamepad;
 
-    private StickControl movement;
-    private ButtonControl primary;
-
-    private List<ButtonControl> actionControls; 
-
-    public PlayerGamepadInputReader(Gamepad gamepad)
-    {
-        this.gamepad = gamepad;
-
-        movement = gamepad.leftStick;
-        primary = gamepad.buttonSouth;
-
-        actionControls = new List<ButtonControl>
-        {
-            primary
-        };
-    }
-
-    public override bool AnyActionDetected()
-    {
-        foreach (var button in actionControls)
-        {
-            if (ScanButton(button) != InputState.None)
-                return true;
-        }
-        return false;
-    }
+    public PlayerGamepadInputReader(Gamepad gamepad) : base(gamepad)
+        => this.gamepad = gamepad;
 
     public override InputSnapshot GenerateInputSnapshot()
     {
