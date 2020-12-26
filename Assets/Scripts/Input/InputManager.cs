@@ -9,6 +9,9 @@ public class InputManager : DeftInputManager
     private PlayerMKBInputReader mkbReader;
     private PlayerGamepadInputReader gamepadReader;
 
+    private PlayerInputProfile mkbProfile;
+    private PlayerInputProfile gamepadProfile;
+
     private Keyboard kb;
     private Mouse mouse;
     private Gamepad gamepad;
@@ -21,6 +24,7 @@ public class InputManager : DeftInputManager
         mouse = Mouse.current;
         gamepad = Gamepad.current;
 
+        LoadInputProfiles();
         SetupInputReaders();
 
         AddReader(InputDeviceType.MouseKeyboard, mkbReader);
@@ -38,39 +42,56 @@ public class InputManager : DeftInputManager
         //if (kb.uKey.wasPressedThisFrame) SetActiveScheme(InputScheme.UI);
     }
 
+    void LoadInputProfiles()
+    {
+        mkbProfile = new PlayerInputProfile();
+        mkbProfile.moveLeft = "a";
+        mkbProfile.moveRight = "d";
+        mkbProfile.moveUp = "w";
+        mkbProfile.moveDown = "s";
+        mkbProfile.primary = "leftButton";
+
+        gamepadProfile = new PlayerInputProfile();
+        gamepadProfile.moveLeft = "leftStick/left";
+        gamepadProfile.moveRight = "leftStick/right";
+        gamepadProfile.moveUp = "leftStick/up";
+        gamepadProfile.moveDown = "leftStick/down";
+        gamepadProfile.primary = "buttonSouth";
+    }
+
     void SetupInputReaders()
     {
         mkbReader = new PlayerMKBInputReader(mouse, kb);
         gamepadReader = new PlayerGamepadInputReader(gamepad);
 
-        SetupMKBInputReader(mkbReader);
-        SetupGamepadInputReader(gamepadReader);
+        SetupMKBInputReader(mkbReader, mkbProfile);
+        SetupGamepadInputReader(gamepadReader, gamepadProfile);
     }
 
-    void SetupMKBInputReader(PlayerMKBInputReader reader)
+    void SetupMKBInputReader(PlayerMKBInputReader reader, PlayerInputProfile profile)
     {
         foreach (string id in InputMappings.KeyboardControlIDs)
             reader.AddInputControl(kb.GetChildControl(id));
 
         foreach (string id in InputMappings.MouseControlIDs)
-            reader.AddInputControl(mouse.GetChildControl(id));
+            reader.AddInputControl(mouse.GetChildControl(id));        
 
-        reader.BindAction(PlayerActions.Movement, "a", Direction.Left);
-        reader.BindAction(PlayerActions.Movement, "d", Direction.Right);
-        reader.BindAction(PlayerActions.Movement, "w", Direction.Up);
-        reader.BindAction(PlayerActions.Movement, "s", Direction.Down);
-        reader.BindAction(PlayerActions.Primary, "leftButton");
+        reader.BindAction(PlayerActions.Movement, profile.moveLeft, Direction.Left);
+        reader.BindAction(PlayerActions.Movement, profile.moveRight, Direction.Right);
+        reader.BindAction(PlayerActions.Movement, profile.moveUp, Direction.Up);
+        reader.BindAction(PlayerActions.Movement, profile.moveDown, Direction.Down);
+        reader.BindAction(PlayerActions.Primary, profile.primary);
     }
 
-    void SetupGamepadInputReader(PlayerGamepadInputReader reader)
+    void SetupGamepadInputReader(PlayerGamepadInputReader reader, PlayerInputProfile profile)
     {
         foreach (string id in InputMappings.GamepadControlIDs)
-            reader.AddInputControl(gamepad.GetChildControl(id));
+            reader.AddInputControl(gamepad.GetChildControl(id));        
 
-        reader.BindAction(PlayerActions.Movement, "leftStick/left", Direction.Left);
-        reader.BindAction(PlayerActions.Movement, "leftStick/right", Direction.Right);
-        reader.BindAction(PlayerActions.Movement, "leftStick/up", Direction.Up);
-        reader.BindAction(PlayerActions.Movement, "leftStick/down", Direction.Down);
-        reader.BindAction(PlayerActions.Primary, "buttonSouth");
+        reader.BindAction(PlayerActions.Movement, profile.moveLeft, Direction.Left);
+        reader.BindAction(PlayerActions.Movement, profile.moveRight, Direction.Right);
+        reader.BindAction(PlayerActions.Movement, profile.moveUp, Direction.Up);
+        reader.BindAction(PlayerActions.Movement, profile.moveDown, Direction.Down);
+        reader.BindAction(PlayerActions.Primary, profile.primary);
     }
 }
