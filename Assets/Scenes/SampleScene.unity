@@ -226,6 +226,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fde063869edab4a49a11cc665b23d90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMkbProfile:
+    primary: leftButton
+    moveLeft: a
+    moveRight: d
+    moveUp: w
+    moveDown: s
+  defaultGamepadProfile:
+    primary: buttonSouth
+    moveLeft: leftStick/left
+    moveRight: leftStick/right
+    moveUp: leftStick/up
+    moveDown: leftStick/down
 --- !u!4 &217359434
 Transform:
   m_ObjectHideFlags: 0
