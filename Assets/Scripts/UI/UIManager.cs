@@ -42,6 +42,12 @@ public class UIManager : Manager<UIManager>
     public void Show<T>(string name) where T : UIPanel 
         => GetPanel<T>(name).IsVisible = true;
 
+    public void Show<T>(System.Action onClose = null) where T : UIPanel
+        => GetPanel<T>().Show(onClose);
+
+    public void Show<T>(string name, System.Action onClose = null) where T : UIPanel
+        => GetPanel<T>(name).Show(onClose);
+
     public void Hide<T>() where T : UIPanel 
         => GetPanel<T>().IsVisible = false;
 

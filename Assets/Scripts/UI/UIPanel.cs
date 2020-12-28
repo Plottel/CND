@@ -8,6 +8,8 @@ namespace Deft.UI
         public delegate void VisibilityChangedHandler(bool visible);
         public VisibilityChangedHandler eventVisibilityChanged;
 
+        public System.Action actionOnClose;
+
         [System.NonSerialized]
         public Canvas canvas;
 
@@ -28,14 +30,20 @@ namespace Deft.UI
                     isVisible = value;
                     canvas.gameObject.SetActive(value);
                     eventVisibilityChanged?.Invoke(value);
+                    actionOnClose?.Invoke();
+                    actionOnClose = null;
                 }
             }
         }
 
-        public T Find<T>(string name) where T : Object
+        public void Show(System.Action onClose = null)
         {
-            return transform.Find<T>(name);
+            IsVisible = true;
+            actionOnClose = onClose;
         }
+
+        public T Find<T>(string name) where T : Object
+            => transform.Find<T>(name);
 
         protected virtual void OnAwake() { }
         protected virtual void OnVisibilityChanged(bool value) { }
