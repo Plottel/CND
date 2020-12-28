@@ -18,14 +18,16 @@ public class UIManager : Manager<UIManager>
         panels = new List<UIPanel>();
 
         foreach (UIPanel panelPrefab in panelCache.prefabs)
-            SpawnChildPanel(panelPrefab);
+            SpawnPanel(panelPrefab);
     }
 
-    private void SpawnChildPanel(UIPanel prefab)
+    private void SpawnPanel(UIPanel prefab)
     {
         Canvas newCanvas = Instantiate(panelCanvasTemplate, transform);
         UIPanel newPanel = Instantiate(prefab, newCanvas.transform);
+
         newPanel.canvas = newCanvas;
+        newCanvas.gameObject.SetActive(false);
 
         // Remove "(Clone)" and add "Canvas-" to newPanel name
         newPanel.name = newPanel.name.Replace(kCloneString, string.Empty);
@@ -33,6 +35,24 @@ public class UIManager : Manager<UIManager>
 
         panels.Add(newPanel);
     }
+
+    public void Show<T>() where T : UIPanel 
+        => GetPanel<T>().IsVisible = true;
+
+    public void Show<T>(string name) where T : UIPanel 
+        => GetPanel<T>(name).IsVisible = true;
+
+    public void Hide<T>() where T : UIPanel 
+        => GetPanel<T>().IsVisible = false;
+
+    public void Hide<T>(string name) where T : UIPanel 
+        => GetPanel<T>(name).IsVisible = false;
+
+    public void Toggle<T>(bool visible) where T : UIPanel
+        => GetPanel<T>().IsVisible = visible;
+
+    public void Toggle<T>(bool visible, string name) where T : UIPanel
+        => GetPanel<T>(name).IsVisible = visible;
 
     public T GetPanel<T>() where T : UIPanel
     {
