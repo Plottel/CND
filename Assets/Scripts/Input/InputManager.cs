@@ -46,7 +46,7 @@ public class InputManager : DeftInputManager
         ApplyInputProfile(gamepadReader, gamepadProfile);
 
         SetActiveDevice(InputDeviceType.MouseKeyboard, true);
-        SetActiveScheme(InputScheme.Gameplay);
+        SetActiveScheme(InputScheme.UI);
     }
 
     void OnInputSchemeChanged(InputScheme scheme)
