@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Deft;
@@ -12,6 +13,7 @@ public class InputManager : DeftInputManager
     private Keyboard kb;
     private Mouse mouse;
     private Gamepad gamepad;
+    private EventSystem eventSystem;
 
     private PlayerMKBInputReader mkbReader;
     private PlayerGamepadInputReader gamepadReader;
@@ -31,6 +33,9 @@ public class InputManager : DeftInputManager
         kb = Keyboard.current;
         mouse = Mouse.current;
         gamepad = Gamepad.current;
+        eventSystem = EventSystem.current;
+
+        eventInputSchemeChanged += OnInputSchemeChanged;
 
         SetupInputReaders();
         AddReader(InputDeviceType.MouseKeyboard, mkbReader);
@@ -42,6 +47,11 @@ public class InputManager : DeftInputManager
 
         SetActiveDevice(InputDeviceType.MouseKeyboard, true);
         SetActiveScheme(InputScheme.Gameplay);
+    }
+
+    void OnInputSchemeChanged(InputScheme scheme)
+    {
+        eventSystem.enabled = scheme == InputScheme.UI;
     }
 
     void SetupInputReaders()

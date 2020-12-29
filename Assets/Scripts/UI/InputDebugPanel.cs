@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using TMPro;
 using Deft.Input;
 using Deft.UI;
 
+
 public class InputDebugPanel : UIPanel
 {
-    private TextMeshProUGUI schemeText;
-    private TextMeshProUGUI actionText;
-    private TextMeshProUGUI controlText;
-    private Button gameplayButton;
-    private Button uiButton;
+    public TextMeshProUGUI schemeText;
+    public TextMeshProUGUI actionText;
+    public TextMeshProUGUI controlText;
+    public Button gameplayButton;
+    public Button uiButton;
 
-    // Add buttons on DebugPanel to swap between Gameplay / UI
-    // Gucci!
     protected override void OnAwake()
     {
         schemeText = Find<TextMeshProUGUI>("Scheme");
@@ -33,8 +35,23 @@ public class InputDebugPanel : UIPanel
         uiButton.onClick.AddListener(OnUIClicked);
     }
 
-    private void OnGameplayClicked() => InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
-    private void OnUIClicked() => InputManager.Get.SetActiveScheme(InputScheme.UI);
+    private void OnGameplayClicked()
+    {
+        InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
+    }
+
+    private void OnUIClicked()
+    {
+        InputManager.Get.SetActiveScheme(InputScheme.UI);
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+            InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
+        else if (Keyboard.current.uKey.wasPressedThisFrame)
+            InputManager.Get.SetActiveScheme(InputScheme.UI);
+    }
 
     void LateUpdate()
     {
