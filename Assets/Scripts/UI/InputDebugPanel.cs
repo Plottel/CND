@@ -17,6 +17,7 @@ public class InputDebugPanel : UIPanel
     public TextMeshProUGUI controlText;
     public Button gameplayButton;
     public Button uiButton;
+    public Button keyModalButton;
 
     protected override void OnAwake()
     {
@@ -30,9 +31,11 @@ public class InputDebugPanel : UIPanel
 
         gameplayButton = Find<Button>("GameplayButton");
         uiButton = Find<Button>("UIButton");
+        keyModalButton = Find<Button>("KeyModalButton");
 
         gameplayButton.onClick.AddListener(OnGameplayClicked);
         uiButton.onClick.AddListener(OnUIClicked);
+        keyModalButton.onClick.AddListener(OnKeyClicked);
     }
 
     private void OnGameplayClicked()
@@ -43,6 +46,11 @@ public class InputDebugPanel : UIPanel
     private void OnUIClicked()
     {
         InputManager.Get.SetActiveScheme(InputScheme.UI);
+    }
+
+    private void OnKeyClicked()
+    {
+        UIManager.Get.PushModal<MattTestPanel>();
     }
 
     private void Update()

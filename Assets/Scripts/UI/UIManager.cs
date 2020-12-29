@@ -12,6 +12,8 @@ public class UIManager : Manager<UIManager>
     [SerializeField] Canvas panelCanvasTemplate = null;
 
     private List<UIPanel> panels;
+    private UIPanel modal;
+
 
     public override void OnAwake()
     {
@@ -19,21 +21,6 @@ public class UIManager : Manager<UIManager>
 
         foreach (UIPanel panelPrefab in panelCache.prefabs)
             SpawnPanel(panelPrefab);
-    }
-
-    private void SpawnPanel(UIPanel prefab)
-    {
-        Canvas newCanvas = Instantiate(panelCanvasTemplate, transform);
-        UIPanel newPanel = Instantiate(prefab, newCanvas.transform);
-
-        newPanel.canvas = newCanvas;
-        newCanvas.gameObject.SetActive(false);
-
-        // Remove "(Clone)" and add "Canvas-" to newPanel name
-        newPanel.name = newPanel.name.Replace(kCloneString, string.Empty);
-        newCanvas.name = string.Concat(kCanvasString, newPanel.name);
-
-        panels.Add(newPanel);
     }
 
     public void Show<T>() where T : UIPanel 
@@ -60,6 +47,41 @@ public class UIManager : Manager<UIManager>
     public void Toggle<T>(bool visible, string name) where T : UIPanel
         => GetPanel<T>(name).IsVisible = visible;
 
+    public void PushModal<T>() where T : UIPanel
+    {
+        foreach (UIPanel panel in panels)
+        {
+            if (panel.IsVisible)
+                panel.IsInteractable = false;
+        }
+
+        modal = GetPanel<T>();
+        modal.Show();
+    }
+
+    public void PopModal()
+    {
+        modal.Hide();
+        modal = null;
+
+        foreach (UIPanel panel in panels)
+        {
+            if (panel.IsVisible)
+                panel.IsInteractable = true;
+        }
+
+        SelectFirstElement();
+    }
+
+    void SelectFirstElement()
+    {
+        foreach (UIPanel panel in panels)
+        {
+            if (panel.IsVisible && panel.IsInteractable)
+                panel.SelectFirstElement();
+        }
+    }
+
     public T GetPanel<T>() where T : UIPanel
     {
         foreach (UIPanel panel in panels)
@@ -79,5 +101,21 @@ public class UIManager : Manager<UIManager>
                 return panel as T;
         }
         return null;
+    }
+
+    private void SpawnPanel(UIPanel prefab)
+    {
+        Canvas newCanvas = Instantiate(panelCanvasTemplate, transform);
+        UIPanel newPanel = Instantiate(prefab, newCanvas.transform);
+
+        newPanel.canvas = newCanvas;
+        newPanel.canvasGroup = newCanvas.GetComponent<CanvasGroup>();
+        newCanvas.gameObject.SetActive(false);
+
+        // Remove "(Clone)" and add "Canvas-" to newPanel name
+        newPanel.name = newPanel.name.Replace(kCloneString, string.Empty);
+        newCanvas.name = string.Concat(kCanvasString, newPanel.name);
+
+        panels.Add(newPanel);
     }
 }

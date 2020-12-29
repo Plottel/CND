@@ -12,8 +12,8 @@ namespace Deft.UI
         [HideInInspector]
         public System.Action actionOnClose;
 
-        [System.NonSerialized]
-        public Canvas canvas;
+        [System.NonSerialized] public Canvas canvas;
+        [System.NonSerialized] public CanvasGroup canvasGroup;
 
         private Selectable[] selectables;
 
@@ -44,14 +44,28 @@ namespace Deft.UI
             }
         }
 
+        public bool IsInteractable
+        {
+            get => canvasGroup.interactable;
+            set => canvasGroup.interactable = value;
+        }
+
         public void SelectFirstElement()
             => selectables[0]?.Select();
 
         public void Show(System.Action onClose = null)
         {
+            IsInteractable = true;
             IsVisible = true;
             actionOnClose = onClose;
         }
+
+        public void Hide()
+        {
+            IsVisible = false;
+            IsInteractable = false;
+        }
+
 
         public T Find<T>(string name) where T : Object
             => transform.Find<T>(name);
