@@ -12,8 +12,7 @@ public class UIManager : Manager<UIManager>
     [SerializeField] Canvas panelCanvasTemplate = null;
 
     private List<UIPanel> panels;
-    private UIPanel modal;
-
+    private UIPanel activeModal;
 
     public override void OnAwake()
     {
@@ -47,7 +46,7 @@ public class UIManager : Manager<UIManager>
     public void Toggle<T>(bool visible, string name) where T : UIPanel
         => GetPanel<T>(name).IsVisible = visible;
 
-    public void PushModal<T>() where T : UIPanel
+    public void PushModal<TPanel, TReturn>(System.Action<TReturn> onPopCallback)
     {
         foreach (UIPanel panel in panels)
         {
@@ -55,14 +54,28 @@ public class UIManager : Manager<UIManager>
                 panel.IsInteractable = false;
         }
 
-        modal = GetPanel<T>();
+        var modal = GetModal<TPanel, TReturn>();
+        modal.actionOnPop = onPopCallback;
         modal.Show();
+
+        activeModal = modal;
+    }
+
+    public UIModalPanel<TReturn> GetModal<TPanel, TReturn>()
+    {
+        foreach (UIPanel panel in panels)
+        {
+            if (panel is TPanel)
+                return panel as UIModalPanel<TReturn>;
+        }
+
+        return null;
     }
 
     public void PopModal()
     {
-        modal.Hide();
-        modal = null;
+        activeModal.Hide();
+        activeModal = null;
 
         foreach (UIPanel panel in panels)
         {

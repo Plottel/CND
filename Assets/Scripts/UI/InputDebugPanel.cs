@@ -15,6 +15,8 @@ public class InputDebugPanel : UIPanel
     public TextMeshProUGUI schemeText;
     public TextMeshProUGUI actionText;
     public TextMeshProUGUI controlText;
+    public TextMeshProUGUI modalKeyText;
+
     public Button gameplayButton;
     public Button uiButton;
     public Button keyModalButton;
@@ -24,10 +26,12 @@ public class InputDebugPanel : UIPanel
         schemeText = Find<TextMeshProUGUI>("Scheme");
         actionText = Find<TextMeshProUGUI>("Action");
         controlText = Find<TextMeshProUGUI>("Control");
+        modalKeyText = Find<TextMeshProUGUI>("ModalKey");
 
         schemeText.text = "";
         actionText.text = "";
         controlText.text = "";
+        modalKeyText.text = "";
 
         gameplayButton = Find<Button>("GameplayButton");
         uiButton = Find<Button>("UIButton");
@@ -50,7 +54,12 @@ public class InputDebugPanel : UIPanel
 
     private void OnKeyClicked()
     {
-        UIManager.Get.PushModal<MattTestPanel>();
+        UIManager.Get.PushModal<AnyKeyModalPanel, string>(OnAnyKeyModalPopped);
+    }
+
+    void OnAnyKeyModalPopped(string value)
+    {
+        modalKeyText.text = value;
     }
 
     private void Update()
