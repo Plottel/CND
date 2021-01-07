@@ -27,12 +27,21 @@ namespace Deft.Input
                     right.ReadValue()
                 );
 
+        public string GetControlID(Direction direction)
+        {
+            if (direction == Direction.Up)          return up.name;
+            else if (direction == Direction.Down)   return down.name;
+            else if (direction == Direction.Left)   return left.name;
+            else if (direction == Direction.Right)  return right.name;
+            return "";
+        }
+
         public void BindControl(ButtonControl control, Direction direction)
         {
-            if (direction == Direction.Up) up = control;
-            else if (direction == Direction.Down) down = control;
-            else if (direction == Direction.Left) left = control;
-            else if (direction == Direction.Right) right = control;
+            if (direction == Direction.Up)          up = control;
+            else if (direction == Direction.Down)   down = control;
+            else if (direction == Direction.Left)   left = control;
+            else if (direction == Direction.Right)  right = control;
         }
     }
 }

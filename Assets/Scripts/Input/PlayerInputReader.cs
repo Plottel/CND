@@ -43,6 +43,15 @@ public abstract class PlayerInputReader : InputReader
         return null;
     }
 
+    public string GetControlID(int actionID, Direction direction = Direction.None)
+    {
+        if (actionID == PlayerActions.Primary)
+            return primary.name;
+        else if (actionID == PlayerActions.Movement)
+            return movement.GetControlID(direction);
+        return "";
+    }
+
     public void BindAction(int actionID, string controlID, Direction direction = Direction.None)
     {
         if (actionID == PlayerActions.Primary)
