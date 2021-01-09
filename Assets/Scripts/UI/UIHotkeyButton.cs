@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Deft;
 using TMPro;
 
-public class UIHotkeyEntry : MonoBehaviour
+public class UIHotkeyButton : Button
 {
     private TextMeshProUGUI actionText;
     private TextMeshProUGUI controlText;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         actionText = transform.Find<TextMeshProUGUI>("ActionName");
         controlText = transform.Find<TextMeshProUGUI>("ControlName");
     }

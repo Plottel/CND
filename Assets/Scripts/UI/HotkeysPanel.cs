@@ -12,22 +12,37 @@ public class HotkeysPanel : UIPanel
 
     private RectTransform hotkeyContainer;
 
-    public UIHotkeyEntry primary;
-    public UIHotkeyEntry moveLeft;
-    public UIHotkeyEntry moveRight;
-    public UIHotkeyEntry moveUp;
-    public UIHotkeyEntry moveDown;
+    public UIHotkeyButton primary;
+    public UIHotkeyButton moveLeft;
+    public UIHotkeyButton moveRight;
+    public UIHotkeyButton moveUp;
+    public UIHotkeyButton moveDown;
+
+    private List<UIHotkeyButton> hotkeyButtons;
+    private UIHotkeyButton selectedButton;
 
     protected override void OnAwake()
     {
         hotkeyContainer = Find<RectTransform>("HotkeysContainer");
         hotkeyTemplate = hotkeyContainer.Find<RectTransform>("HotkeyTemplate");
 
-        primary = Find<UIHotkeyEntry>("PrimaryHotkey");
-        moveLeft = Find<UIHotkeyEntry>("MoveLeftHotkey");
-        moveRight = Find<UIHotkeyEntry>("MoveRightHotkey");
-        moveUp = Find<UIHotkeyEntry>("MoveUpHotkey");
-        moveDown = Find<UIHotkeyEntry>("MoveDownHotkey");
+        primary = Find<UIHotkeyButton>("PrimaryHotkey");
+        moveLeft = Find<UIHotkeyButton>("MoveLeftHotkey");
+        moveRight = Find<UIHotkeyButton>("MoveRightHotkey");
+        moveUp = Find<UIHotkeyButton>("MoveUpHotkey");
+        moveDown = Find<UIHotkeyButton>("MoveDownHotkey");
+
+        hotkeyButtons = new List<UIHotkeyButton>
+        {
+            primary,
+            moveLeft,
+            moveRight,
+            moveUp,
+            moveDown
+        };
+
+        foreach (var button in hotkeyButtons)
+            button.onClick.AddListener(() => OnHotkeyButtonClicked(button));
     }
 
     protected override void OnStart()
@@ -38,15 +53,22 @@ public class HotkeysPanel : UIPanel
         };
     }
 
-    private void Get_eventInputDeviceChanged(InputDeviceType deviceType)
-    {
-        throw new System.NotImplementedException();
-    }
-
     protected override void OnVisibilityChanged(bool value)
     {
         if (value)
             RefreshPanel();
+    }
+
+    void OnHotkeyButtonClicked(UIHotkeyButton button)
+    {
+        selectedButton = button;
+        UIManager.Get.PushModal<AnyKeyModalPanel, string>(OnAnyKeyModalPopped);
+    }
+
+    void OnAnyKeyModalPopped(string controlID)
+    {
+        selectedButton.ControlName = controlID;
+        selectedButton = null;
     }
 
     void RefreshPanel()
