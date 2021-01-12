@@ -11,6 +11,7 @@ public class MattTestManager : Manager<MattTestManager>
 
     public override void OnStart()
     {
-        UIManager.Get.Show<InputDebugPanel>();
+        //UIManager.Get.Show<InputDebugPanel>();
+        UIManager.Get.Show<HotkeysPanel>();
     }
 }

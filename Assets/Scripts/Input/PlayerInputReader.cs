@@ -43,6 +43,30 @@ public abstract class PlayerInputReader : InputReader
         return null;
     }
 
+    public string GetControlID(int actionID, Direction direction = Direction.None)
+    {
+        if (actionID == PlayerActions.Primary)
+            return primary.name;
+        else if (actionID == PlayerActions.Movement)
+            return movement.GetControlID(direction);
+        return "";
+    }
+
+    public void BindAxis(int actionID, string axisRootID)
+    {
+        if (actionID == PlayerActions.Primary)
+            primary = Find<ButtonControl>(axisRootID);
+        else if (actionID == PlayerActions.Movement)
+        {
+            movement.BindControl(Find<ButtonControl>(axisRootID + "/left"), Direction.Left);
+            movement.BindControl(Find<ButtonControl>(axisRootID + "/right"), Direction.Right);
+            movement.BindControl(Find<ButtonControl>(axisRootID + "/up"), Direction.Up);
+            movement.BindControl(Find<ButtonControl>(axisRootID + "/down"), Direction.Down);
+        }
+
+        RefreshActionControls();
+    }
+
     public void BindAction(int actionID, string controlID, Direction direction = Direction.None)
     {
         if (actionID == PlayerActions.Primary)

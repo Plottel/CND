@@ -22,8 +22,14 @@ public class AnyKeyModalPanel : UIModalPanel<string>
             var reader = InputManager.Get.GetActiveReader<PlayerInputReader>();
             if (reader.AnyControlPressed(out InputControl control))
             {
+                string parentName = control.parent.name;
+                string fullControlName = control.name;
+
+                if (parentName.Contains("Stick"))
+                    fullControlName = parentName + "/" + control.name;
+
                 UIManager.Get.PopModal();
-                actionOnPop?.Invoke(control.name);
+                actionOnPop?.Invoke(fullControlName);
                 break;
             }
 

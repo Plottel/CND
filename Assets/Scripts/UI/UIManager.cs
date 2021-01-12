@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Deft;
 using Deft.UI;
 
@@ -10,12 +12,16 @@ public class UIManager : Manager<UIManager>
 
     [SerializeField] UIPanelCache panelCache = null;
     [SerializeField] Canvas panelCanvasTemplate = null;
+    [SerializeField] Canvas modalOverlay = null;
+
+    private EventSystem eventSystem;
 
     private List<UIPanel> panels;
     private UIPanel activeModal;
 
     public override void OnAwake()
     {
+        eventSystem = EventSystem.current;
         panels = new List<UIPanel>();
 
         foreach (UIPanel panelPrefab in panelCache.prefabs)
@@ -56,6 +62,8 @@ public class UIManager : Manager<UIManager>
 
         var modal = GetModal<TPanel, TReturn>();
         modal.actionOnPop = onPopCallback;
+
+        modalOverlay.gameObject.SetActive(true);
         modal.Show();
 
         activeModal = modal;
@@ -74,6 +82,7 @@ public class UIManager : Manager<UIManager>
 
     public void PopModal()
     {
+        modalOverlay.gameObject.SetActive(false);
         activeModal.Hide();
         activeModal = null;
 
@@ -114,6 +123,15 @@ public class UIManager : Manager<UIManager>
                 return panel as T;
         }
         return null;
+    }
+
+    public void InjectNavigate(MoveDirection dir)
+    {
+        var eventData = new AxisEventData(eventSystem);
+        eventData.moveDir = dir;
+        eventData.selectedObject = eventSystem.currentSelectedGameObject;
+
+        ExecuteEvents.Execute(eventData.selectedObject, eventData, ExecuteEvents.moveHandler);
     }
 
     private void SpawnPanel(UIPanel prefab)

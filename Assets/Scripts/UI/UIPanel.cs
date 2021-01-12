@@ -24,6 +24,11 @@ namespace Deft.UI
             OnAwake();
         }
 
+        private void Start()
+        {
+            OnStart();
+        }
+
         private bool isVisible;
         public bool IsVisible
         {
@@ -51,7 +56,10 @@ namespace Deft.UI
         }
 
         public void SelectFirstElement()
-            => selectables[0]?.Select();
+        {
+            if (selectables.Length > 0)
+                selectables[0].Select();
+        }
 
         public void Show(System.Action onClose = null)
         {
@@ -66,11 +74,11 @@ namespace Deft.UI
             IsInteractable = false;
         }
 
-
         public T Find<T>(string name) where T : Object
             => transform.Find<T>(name);
 
         protected virtual void OnAwake() { }
+        protected virtual void OnStart() { }
         protected virtual void OnVisibilityChanged(bool value) { }
     }
 }

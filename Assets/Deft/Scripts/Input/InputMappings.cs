@@ -45,11 +45,15 @@
             "buttonNorth",
             "buttonWest",
             "buttonEast",
-            "leftStick",
+            //"leftStick", // Do we care about sticks as a whole if we're 4-way splitting?
             "leftStick/up",
             "leftStick/down",
             "leftStick/left",
-            "leftStick/right"
+            "leftStick/right",
+            "rightStick/up",
+            "rightStick/down",
+            "rightStick/left",
+            "rightStick/right"
         };
     }
 }
