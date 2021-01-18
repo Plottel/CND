@@ -52,6 +52,12 @@ public class UIManager : Manager<UIManager>
     public void Toggle<T>(bool visible, string name) where T : UIPanel
         => GetPanel<T>(name).IsVisible = visible;
 
+    public void CloseAllPanels()
+    {
+        foreach (UIPanel panel in panels)
+            panel.Hide();
+    }
+
     public void PushModal<TPanel, TReturn>(System.Action<TReturn> onPopCallback)
     {
         foreach (UIPanel panel in panels)
