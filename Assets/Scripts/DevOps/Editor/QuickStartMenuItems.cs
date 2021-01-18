@@ -14,6 +14,10 @@ public static class QuickStartMenuItems
     static void SetQuickStartHotkeysPanel()
         => QuickStarter.SetQuickStartScene("HotkeysTesting");
 
+    [MenuItem("Deft/Quick Start Scenes/WorldEditor")]
+    static void SetQuickStartWorldEditorPanel()
+        => QuickStarter.SetQuickStartScene("WorldScene");
+
     [MenuItem("Deft/Quick Start Scenes/Clear")]
     static void ClearQuickStart()
         => QuickStarter.SetQuickStartScene("");
