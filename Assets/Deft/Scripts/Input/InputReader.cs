@@ -8,7 +8,8 @@ namespace Deft.Input
     public abstract class InputReader
     {
         public abstract bool AnyActionDetected();
-        public abstract InputSnapshot GenerateInputSnapshot();        
+        public abstract InputSnapshot GenerateInputSnapshot();
+        public virtual Vector2 ScanNavigate() => Vector2.zero;
     }
 }
 

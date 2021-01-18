@@ -37,39 +37,52 @@ public class InputManager : DeftInputManager
 
         eventInputSchemeChanged += OnInputSchemeChanged;
 
-        SetupInputReaders();
-        AddReader(InputDeviceType.MouseKeyboard, mkbReader);
-        AddReader(InputDeviceType.Gamepad, gamepadReader);
+        LoadInputProfiles();
 
-        SetupInputProfiles();
+        mkbReader = new PlayerMKBInputReader(mouse, kb);
+        gamepadReader = new PlayerGamepadInputReader(gamepad);
+    
+        if (mouse != null && kb != null)
+        {
+            // Add Keyboard controls
+            foreach (string id in InputMappings.KeyboardControlIDs)
+                mkbReader.AddInputControl(kb.GetChildControl(id));
+
+            // Add Mouse controls
+            foreach (string id in InputMappings.MouseControlIDs)
+                mkbReader.AddInputControl(mouse.GetChildControl(id));
+        }
+        
+        if (gamepad != null)
+        {
+            // Add Gamepad controls
+            foreach (string id in InputMappings.GamepadControlIDs)
+                gamepadReader.AddInputControl(gamepad.GetChildControl(id));
+        }
+
         ApplyInputProfile(mkbReader, mkbProfile);
         ApplyInputProfile(gamepadReader, gamepadProfile);
 
-        SetActiveDevice(InputDeviceType.MouseKeyboard, true);
-        SetActiveScheme(InputScheme.UI);
+        AddReader(InputDeviceType.MouseKeyboard, mkbReader);
+        AddReader(InputDeviceType.Gamepad, gamepadReader);
+
+        // Set Active Device
+        if (mkbReader != null)
+            SetActiveDevice(InputDeviceType.MouseKeyboard, true);
+        else if (gamepadReader != null)
+            SetActiveDevice(InputDeviceType.Gamepad, true);
+        else
+            Debug.LogError("No Input Reader found");
+
+        SetActiveScheme(InputScheme.Menu);
     }
 
     void OnInputSchemeChanged(InputScheme scheme)
     {
-        eventSystem.enabled = scheme == InputScheme.UI;
+        eventSystem.enabled = scheme == InputScheme.Menu;
     }
 
-    void SetupInputReaders()
-    {
-        mkbReader = new PlayerMKBInputReader(mouse, kb);
-        gamepadReader = new PlayerGamepadInputReader(gamepad);
-
-        foreach (string id in InputMappings.KeyboardControlIDs)
-            mkbReader.AddInputControl(kb.GetChildControl(id));
-
-        foreach (string id in InputMappings.MouseControlIDs)
-            mkbReader.AddInputControl(mouse.GetChildControl(id));
-
-        foreach (string id in InputMappings.GamepadControlIDs)
-            gamepadReader.AddInputControl(gamepad.GetChildControl(id));
-    }
-
-    void SetupInputProfiles()
+    void LoadInputProfiles()
     {
         if (File.Exists(kCustomProfilePath)) // Try load custom profile 
         {

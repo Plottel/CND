@@ -53,7 +53,7 @@ public class InputDebugPanel : UIPanel
 
     private void OnUIClicked()
     {
-        InputManager.Get.SetActiveScheme(InputScheme.UI);
+        InputManager.Get.SetActiveScheme(InputScheme.Menu);
     }
 
     private void OnKeyClicked()
@@ -95,7 +95,7 @@ public class InputDebugPanel : UIPanel
         if (Keyboard.current.gKey.wasPressedThisFrame)
             InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
         else if (Keyboard.current.uKey.wasPressedThisFrame)
-            InputManager.Get.SetActiveScheme(InputScheme.UI);
+            InputManager.Get.SetActiveScheme(InputScheme.Menu);
     }
 
     void LateUpdate()

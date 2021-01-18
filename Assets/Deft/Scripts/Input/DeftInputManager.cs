@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.EventSystems;
 using Deft.Input;
 
 namespace Deft
@@ -52,18 +55,22 @@ namespace Deft
 
         public override void OnUpdate()
         {
-            UpdateActiveInputDevice();
+            ChangeActiveInputReaderIfActionDetected();
 
             if (activeScheme == InputScheme.Gameplay)
             {
                 inputSnapshot = activeReader.GenerateInputSnapshot();
                 ProcessInputSnapshot(inputSnapshot);
             }
-            else if (activeScheme == InputScheme.UI)
+            else if (activeScheme == InputScheme.Menu)
             {
-                inputSnapshot = new InputSnapshot(PlayerActions.Count);
-                // Record input and forward it to UI input module somehow?
-                // Am I overcomplicating this?
+                // Process UI Snapshot?
+                //Vector2 navigate = activeReader.ScanNavigate().normalized;
+                //if (navigate != Vector2.zero)
+                //{
+                //    Debug.Log("Navigate:" + navigate.ToString());
+                //    UIManager.Get.InjectNavigate(navigate);
+                //}
             }
         }
 
@@ -90,17 +97,15 @@ namespace Deft
             }
         }
 
-        private void UpdateActiveInputDevice()
+        private void ChangeActiveInputReaderIfActionDetected()
         {
-            if (activeDeviceType == InputDeviceType.MouseKeyboard)
+            for (int i = 0; i < inputReaders.Length; ++i)
             {
-                if (inputReaders[(int)InputDeviceType.Gamepad].AnyActionDetected())
-                    SetActiveDevice(InputDeviceType.Gamepad);
-            }
-            else if (activeDeviceType == InputDeviceType.Gamepad)
-            {
-                if (inputReaders[(int)InputDeviceType.MouseKeyboard].AnyActionDetected())
-                    SetActiveDevice(InputDeviceType.MouseKeyboard);
+                if (i == (int)activeDeviceType)
+                    continue;
+
+                if (inputReaders[i].AnyActionDetected())
+                    SetActiveDevice((InputDeviceType)i);
             }
         }
 
