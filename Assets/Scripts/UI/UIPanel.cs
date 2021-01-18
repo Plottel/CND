@@ -38,6 +38,7 @@ namespace Deft.UI
                 if (isVisible != value)
                 {
                     isVisible = value;
+                    IsInteractable = value;
                     canvas.gameObject.SetActive(value);
                     eventVisibilityChanged?.Invoke(value);
                     actionOnClose?.Invoke();

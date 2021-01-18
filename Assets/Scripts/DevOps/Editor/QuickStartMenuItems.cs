@@ -10,15 +10,11 @@ public static class QuickStartMenuItems
     public static void TogglePlayMode()
     => EditorApplication.ExecuteMenuItem("Edit/Play");
 
-    [MenuItem("Deft/Quick Start - Hotkeys Panel")]
+    [MenuItem("Deft/Quick Start Scenes/HotkeysTesting")]
     static void SetQuickStartHotkeysPanel()
-    {
-        QuickStarter.SetQuickStartRoutine("HotkeysPanelRoutine");
-    }
+        => QuickStarter.SetQuickStartScene("HotkeysTesting");
 
-    [MenuItem("Deft/Quick Start - Clear")]
+    [MenuItem("Deft/Quick Start Scenes/Clear")]
     static void ClearQuickStart()
-    {
-        QuickStarter.SetQuickStartRoutine("");
-    }
+        => QuickStarter.SetQuickStartScene("");
 }

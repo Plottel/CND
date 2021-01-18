@@ -20,17 +20,11 @@ namespace Deft.DevOps
         private static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             if (scene.name == "Startup")
-            {
                 SceneManager.sceneLoaded -= OnSceneLoaded;
-
-                string routineName = EditorPrefs.GetString("QuickStart");
-                if (!string.IsNullOrEmpty(routineName))
-                    DeftStartupManager.Get.BeginQuickStart(routineName);
-            }
         }
 
-        public static void SetQuickStartRoutine(string name)
-            => EditorPrefs.SetString("QuickStart", name);
+        public static void SetQuickStartScene(string name)
+            => EditorPrefs.SetString("QuickStartScene", name);
     }
 }
 

@@ -9,14 +9,9 @@ namespace Deft.DevOps
     {
         protected EventSystem eventSystem;
 
-#if UNITY_EDITOR
-        public void BeginQuickStart(string routineName)
+        public override void OnStart()
         {
-            eventSystem = EventSystem.current;
-            if (!string.IsNullOrEmpty(routineName))
-                StartCoroutine(routineName);
+            UIManager.Get.Show<StartupPanel>();
         }
-#endif
     }
-
 }
