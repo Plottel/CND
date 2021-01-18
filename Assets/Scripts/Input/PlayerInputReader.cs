@@ -91,6 +91,9 @@ public abstract class PlayerInputReader : InputReader
 
     public override bool AnyActionDetected()
     {
+        if (device == null)
+            return false;
+
         foreach (var button in actionControls)
         {
             if (ScanButton(button) != InputState.None)

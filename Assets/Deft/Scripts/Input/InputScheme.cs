@@ -6,7 +6,7 @@ namespace Deft.Input
 {
     public enum InputScheme
     {
-        UI,
+        Menu,
         Gameplay
     }
 }

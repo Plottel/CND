@@ -23,6 +23,11 @@ public class PlayerGamepadInputReader : PlayerInputReader
         return result;
     }
 
+    public override Vector2 ScanNavigate()
+    {
+        return movement.ReadValue();
+    }
+
     ActionSnapshot GetMovementSnapshot() =>
         new ActionSnapshot
         {

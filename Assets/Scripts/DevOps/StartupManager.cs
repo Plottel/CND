@@ -9,12 +9,13 @@ public class StartupManager : DeftStartupManager
 {
     IEnumerator HotkeysPanelRoutine()
     {
+        yield return null;
         UIManager.Get.Show<HotkeysPanel>();
 
-        for (int i = 0; i < 5; ++i)
-        {
-            yield return new WaitForSeconds(1);
-            UIManager.Get.InjectNavigate(MoveDirection.Down);
-        }
+        //for (int i = 0; i < 5; ++i)
+        //{
+        //    yield return new WaitForSeconds(1);
+        //    UIManager.Get.InjectNavigate(MoveDirection.Down);
+        //}
     }
 }

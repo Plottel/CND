@@ -125,10 +125,19 @@ public class UIManager : Manager<UIManager>
         return null;
     }
 
-    public void InjectNavigate(MoveDirection dir)
+    public void InjectNavigate(MoveDirection direction)
     {
         var eventData = new AxisEventData(eventSystem);
-        eventData.moveDir = dir;
+        eventData.moveDir = direction;
+        eventData.selectedObject = eventSystem.currentSelectedGameObject;     
+
+        ExecuteEvents.Execute(eventData.selectedObject, eventData, ExecuteEvents.moveHandler);
+    }
+
+    public void InjectNavigate(Vector2 direction)
+    {
+        var eventData = new AxisEventData(eventSystem);
+        eventData.moveVector = direction;
         eventData.selectedObject = eventSystem.currentSelectedGameObject;
 
         ExecuteEvents.Execute(eventData.selectedObject, eventData, ExecuteEvents.moveHandler);
