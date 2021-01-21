@@ -10,9 +10,6 @@ namespace Deft.Input
     {
         static KeyboardDpadControl() => InputSystem.RegisterLayout<KeyboardDpadControl>();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        void Initialize() { }
-
         public ButtonControl left;
         public ButtonControl right;
         public ButtonControl up;
