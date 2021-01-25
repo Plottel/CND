@@ -7,11 +7,9 @@ namespace Deft.DevOps
 {
     public class DeftStartupManager : Manager<DeftStartupManager>
     {
-        protected EventSystem eventSystem;
-
         public override void OnStart()
         {
-            UIManager.Get.Show<StartupPanel>();
+            UIManager.Get.Show<MainMenuPanel>();
         }
     }
 }

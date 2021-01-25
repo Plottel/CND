@@ -11,7 +11,7 @@ using TMPro;
 using UnityEditor;
 #endif
 
-public class StartupPanel : UIPanel
+public class MainMenuPanel : UIPanel
 {
     Button testSceneContainer;
     TMP_Dropdown testSceneDropdown;
@@ -44,6 +44,7 @@ public class StartupPanel : UIPanel
 
     void LoadTestScene(string sceneName)
     {
+        GameManager.Get.SetState(GameState.TestScene);
         UIManager.Get.CloseAllPanels();
         SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
     }
