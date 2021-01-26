@@ -232,12 +232,14 @@ MonoBehaviour:
     moveRight: d
     moveUp: w
     moveDown: s
+    start: escape
   defaultGamepadProfile:
     primary: buttonSouth
     moveLeft: leftStick/left
     moveRight: leftStick/right
     moveUp: leftStick/up
     moveDown: leftStick/down
+    start: start
 --- !u!4 &217359434
 Transform:
   m_ObjectHideFlags: 0

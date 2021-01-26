@@ -8,6 +8,7 @@ public struct PlayerInputProfile
     public string moveRight;
     public string moveUp;
     public string moveDown;
+    public string start;
 
     public void Serialize(StreamWriter writer)
     {
@@ -16,6 +17,7 @@ public struct PlayerInputProfile
         writer.WriteLine(moveRight);
         writer.WriteLine(moveUp);
         writer.WriteLine(moveDown);
+        writer.WriteLine(start);
     }
 
     public void Deserialize(StreamReader reader)
@@ -25,5 +27,6 @@ public struct PlayerInputProfile
         moveRight = reader.ReadLine();
         moveUp = reader.ReadLine();
         moveDown = reader.ReadLine();
+        start = reader.ReadLine();
     }
 }

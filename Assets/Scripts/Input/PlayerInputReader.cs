@@ -13,6 +13,7 @@ public abstract class PlayerInputReader : InputReader
 
     public ButtonControl primary;
     public KeyboardDpadControl movement;
+    public ButtonControl start;
 
     public PlayerInputReader(InputDevice device)
     {
@@ -73,6 +74,8 @@ public abstract class PlayerInputReader : InputReader
             primary = Find<ButtonControl>(controlID);
         else if (actionID == PlayerActions.Movement)
             movement.BindControl(Find<ButtonControl>(controlID), direction);
+        else if (actionID == PlayerActions.Start)
+            start = Find<ButtonControl>(controlID);
 
         RefreshActionControls();
     }
@@ -85,7 +88,8 @@ public abstract class PlayerInputReader : InputReader
             movement.left,
             movement.right,
             movement.up,
-            movement.down
+            movement.down,
+            start
         };
     }
 

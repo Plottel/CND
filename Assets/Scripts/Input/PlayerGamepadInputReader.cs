@@ -19,6 +19,7 @@ public class PlayerGamepadInputReader : PlayerInputReader
 
         result.SetActionSnapshot(PlayerActions.Movement, GetMovementSnapshot());
         result.SetActionSnapshot(PlayerActions.Primary, GetPrimarySnapshot());
+        result.SetActionSnapshot(PlayerActions.Start, GetStartSnapshot());
 
         return result;
     }
@@ -43,6 +44,15 @@ public class PlayerGamepadInputReader : PlayerInputReader
             actionID = PlayerActions.Primary,
             type = InputType.Button,
             state = ScanButton(primary),
+            axis = Vector2.zero
+        };
+
+    ActionSnapshot GetStartSnapshot() =>
+        new ActionSnapshot
+        {
+            actionID = PlayerActions.Start,
+            type = InputType.Button,
+            state = ScanButton(start),
             axis = Vector2.zero
         };
 }

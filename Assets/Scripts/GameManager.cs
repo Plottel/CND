@@ -6,8 +6,6 @@ using Deft.Input;
 
 public class GameManager : DeftGameManager<GameManager>
 {
-    public event System.Action eventEnterGame;
-
     public override void OnAwake()
     {
         eventGameStateChanged += OnGameStateChanged;
@@ -29,7 +27,6 @@ public class GameManager : DeftGameManager<GameManager>
 
             case GameState.InGame:
                 InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
-                eventEnterGame?.Invoke();
                 break;
 
             case GameState.Loading:
