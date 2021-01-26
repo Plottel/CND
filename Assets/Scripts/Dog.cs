@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Deft;
 
-public class Dog : MonoBehaviour
+public class Dog : Prop
 {
     public float MoveSpeed = 0.02f;
 

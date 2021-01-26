@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Deft
 {
-    public class DeftGameManager : Manager<DeftGameManager>
+    public class DeftGameManager<T> : Manager<T> where T : MonoBehaviour
     {
         public delegate void GameStateChangedHandler(GameState oldState, GameState newState);
         public event GameStateChangedHandler eventGameStateChanged;

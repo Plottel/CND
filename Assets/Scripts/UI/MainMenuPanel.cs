@@ -13,15 +13,19 @@ using UnityEditor;
 
 public class MainMenuPanel : UIPanel
 {
-    Button testSceneContainer;
     TMP_Dropdown testSceneDropdown;
+    Button testSceneButton;
+    Button enterGameButton;
 
     protected override void OnAwake()
     {
-        testSceneContainer = Find<Button>("TestSceneContainer");
-        testSceneDropdown = testSceneContainer.Find<TMP_Dropdown>("TestSceneDropdown");
+        testSceneButton = Find<Button>("TestSceneButton");
+        testSceneDropdown = testSceneButton.Find<TMP_Dropdown>("TestSceneDropdown");
 
-        testSceneContainer.onClick.AddListener(OnTestSceneButtonClicked);
+        enterGameButton = Find<Button>("EnterGameButton");
+
+        testSceneButton.onClick.AddListener(OnTestSceneButtonClicked);
+        enterGameButton.onClick.AddListener(OnEnterGameButtonClicked);
     }
 
     protected override void OnStart()
@@ -34,6 +38,12 @@ public class MainMenuPanel : UIPanel
 #endif
     }
 
+    void LoadTestScene(string sceneName)
+    {
+        GameManager.Get.SetState(GameState.TestScene);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+    }
+
     void OnTestSceneButtonClicked()
     {
         string testScene = testSceneDropdown.captionText.text;
@@ -42,10 +52,9 @@ public class MainMenuPanel : UIPanel
             LoadTestScene(testScene);
     }
 
-    void LoadTestScene(string sceneName)
+    void OnEnterGameButtonClicked()
     {
-        GameManager.Get.SetState(GameState.TestScene);
-        UIManager.Get.CloseAllPanels();
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+        GameManager.Get.SetState(GameState.Loading);
+        GameManager.Get.SetState(GameState.InGame);
     }
 }
