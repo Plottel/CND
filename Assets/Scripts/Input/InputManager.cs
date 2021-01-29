@@ -79,7 +79,7 @@ public class InputManager : DeftInputManager
 
     void OnInputSchemeChanged(InputScheme scheme)
     {
-        eventSystem.enabled = scheme == InputScheme.Menu;
+        //eventSystem.enabled = scheme == InputScheme.Menu;
     }
 
     void LoadInputProfiles()

@@ -45,20 +45,24 @@ public class SimulationManager : Manager<SimulationManager>
 
     private void OnEnterGame()
     {
-        dog = Instantiate(DogPrefab);
-        controller = new GameObject().AddComponent<DogController>();
-        controller.target = dog;
+        //dog = Instantiate(DogPrefab);
+        //controller = new GameObject().AddComponent<DogController>();
+        //controller.target = dog;
 
         InputManager.Get.eventActionPressed += OnActionPressed;
     }
 
-    public void ExitToMainMenu()
+    private void OnExitGame()
     {
-        InputManager.Get.eventActionDown -= OnActionPressed;
-
-        eventExitGame?.Invoke();
+        InputManager.Get.eventActionPressed -= OnActionPressed;
         GameManager.Get.SetState(GameState.Loading);
         GameManager.Get.SetState(GameState.MainMenu);
+    }
+
+    public void ExitToMainMenu()
+    {
+        OnExitGame();
+        eventExitGame?.Invoke();
     }
 
     void OnActionPressed(int actionID)
