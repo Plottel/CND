@@ -34,9 +34,7 @@ public class SimulationManager : Manager<SimulationManager>
     {
         GameManager.Get.SetState(GameState.Loading);
 
-        dog = Instantiate(DogPrefab);
-        controller = new GameObject().AddComponent<DogController>();
-        controller.target = dog;
+        SpawnEntities();
 
         GameManager.Get.SetState(GameState.InGame);
 
@@ -49,13 +47,25 @@ public class SimulationManager : Manager<SimulationManager>
         eventExitGame?.Invoke();
         InputManager.Get.eventActionPressed -= OnActionPressed;
 
+        DestroyEntities();
+
+        GameManager.Get.SetState(GameState.MainMenu);
+    }
+
+    private void SpawnEntities()
+    {
+        dog = Instantiate(DogPrefab);
+        controller = new GameObject().AddComponent<DogController>();
+        controller.target = dog;
+    }
+
+    private void DestroyEntities()
+    {
         Destroy(dog.gameObject);
         Destroy(controller.gameObject);
 
         dog = null;
         controller = null;
-
-        GameManager.Get.SetState(GameState.MainMenu);
     }
 
     void OnActionPressed(int actionID)
