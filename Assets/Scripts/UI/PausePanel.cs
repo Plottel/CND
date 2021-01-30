@@ -17,5 +17,5 @@ public class PausePanel : UIPanel
     }
 
     void OnQuitButtonClicked()
-        => SimulationManager.Get.ExitGame();
+        => DeftSimulationManager.Get.ExitGame();
 }

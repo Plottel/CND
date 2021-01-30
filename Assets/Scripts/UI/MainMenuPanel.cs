@@ -54,6 +54,6 @@ public class MainMenuPanel : UIPanel
 
     void OnEnterGameButtonClicked()
     {
-        SimulationManager.Get.EnterGame();
+        DeftSimulationManager.Get.EnterGame();
     }
 }
