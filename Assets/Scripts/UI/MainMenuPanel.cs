@@ -54,7 +54,6 @@ public class MainMenuPanel : UIPanel
 
     void OnEnterGameButtonClicked()
     {
-        GameManager.Get.SetState(GameState.Loading);
-        GameManager.Get.SetState(GameState.InGame);
+        SimulationManager.Get.EnterGame();
     }
 }

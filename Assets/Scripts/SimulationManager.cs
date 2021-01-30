@@ -23,46 +23,39 @@ public class SimulationManager : Manager<SimulationManager>
         set
         {
             isPaused = value;
-            //Time.timeScale = isPaused ? 0 : 1;
-            //InputManager.Get.SetActiveScheme(isPaused ? InputScheme.Menu : InputScheme.Gameplay);
+            // TODO: Actually pause.. Time scale?
         }
     }
 
     public override void OnStart()
-    {
-        GameManager.Get.eventGameStateChanged += OnGameStateChanged;
-        pausePanel = UIManager.Get.GetPanel<PausePanel>();
-    }
+        => pausePanel = UIManager.Get.GetPanel<PausePanel>();
 
-    private void OnGameStateChanged(GameState oldState, GameState newState)
+    public void EnterGame()
     {
-        if (newState == GameState.InGame)
-        {
-            OnEnterGame();
-            eventEnterGame?.Invoke();
-        }
-    }
+        GameManager.Get.SetState(GameState.Loading);
 
-    private void OnEnterGame()
-    {
-        //dog = Instantiate(DogPrefab);
-        //controller = new GameObject().AddComponent<DogController>();
-        //controller.target = dog;
+        dog = Instantiate(DogPrefab);
+        controller = new GameObject().AddComponent<DogController>();
+        controller.target = dog;
+
+        GameManager.Get.SetState(GameState.InGame);
 
         InputManager.Get.eventActionPressed += OnActionPressed;
+        eventEnterGame?.Invoke();
     }
 
-    private void OnExitGame()
+    public void ExitGame()
     {
-        InputManager.Get.eventActionPressed -= OnActionPressed;
-        GameManager.Get.SetState(GameState.Loading);
-        GameManager.Get.SetState(GameState.MainMenu);
-    }
-
-    public void ExitToMainMenu()
-    {
-        OnExitGame();
         eventExitGame?.Invoke();
+        InputManager.Get.eventActionPressed -= OnActionPressed;
+
+        Destroy(dog.gameObject);
+        Destroy(controller.gameObject);
+
+        dog = null;
+        controller = null;
+
+        GameManager.Get.SetState(GameState.MainMenu);
     }
 
     void OnActionPressed(int actionID)
