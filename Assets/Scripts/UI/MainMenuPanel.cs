@@ -16,6 +16,8 @@ public class MainMenuPanel : UIPanel
     TMP_Dropdown testSceneDropdown;
     Button testSceneButton;
     Button enterGameButton;
+    Button settingsButton;
+    Button testButton;
 
     protected override void OnAwake()
     {
@@ -23,9 +25,15 @@ public class MainMenuPanel : UIPanel
         testSceneDropdown = testSceneButton.Find<TMP_Dropdown>("TestSceneDropdown");
 
         enterGameButton = Find<Button>("EnterGameButton");
+        settingsButton = Find<Button>("SettingsButton");
 
         testSceneButton.onClick.AddListener(OnTestSceneButtonClicked);
         enterGameButton.onClick.AddListener(OnEnterGameButtonClicked);
+        settingsButton.onClick.AddListener(OnSettingsButtonClicked);
+
+        testButton = Find<Button>("TestButton");
+        testButton.onClick.AddListener(() => Debug.Log("Test Click"));
+
     }
 
     protected override void OnStart()
@@ -55,5 +63,11 @@ public class MainMenuPanel : UIPanel
     void OnEnterGameButtonClicked()
     {
         DeftSimulationManager.Get.EnterGame();
+    }
+
+    void OnSettingsButtonClicked()
+    {
+        UIManager.Get.Hide<MainMenuPanel>();
+        UIManager.Get.Show<HotkeysPanel>();
     }
 }

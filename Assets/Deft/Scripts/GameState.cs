@@ -9,7 +9,7 @@ namespace Deft
         MainMenu,
         InGame,
         Loading,
-        TestScene // NOTE(Matt): Possibly remove later
+        TestScene // NOTE(Matt): Possibly remove later,
     }
 }
 
