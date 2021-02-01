@@ -27,6 +27,8 @@ public class GameManager : DeftGameManager<GameManager>
 
             case GameState.InGame:
                 InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
+                UIManager.Get.Show<AbilityPanel>();
+                UIManager.Get.ClearSelected();
                 break;
 
             case GameState.Loading:

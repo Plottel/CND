@@ -110,6 +110,9 @@ public class UIManager : Manager<UIManager>
         }
     }
 
+    public void ClearSelected()
+        => eventSystem.SetSelectedGameObject(null);
+
     public T GetPanel<T>() where T : UIPanel
     {
         foreach (UIPanel panel in panels)
