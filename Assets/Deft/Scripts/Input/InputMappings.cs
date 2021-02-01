@@ -29,7 +29,8 @@
             "w",
             "x",
             "y",
-            "z"
+            "z",
+            "escape"
         };
 
         public static string[] MouseControlIDs { get; } = new string[]
@@ -53,7 +54,8 @@
             "rightStick/up",
             "rightStick/down",
             "rightStick/left",
-            "rightStick/right"
+            "rightStick/right",
+            "start"
         };
     }
 }

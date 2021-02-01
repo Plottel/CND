@@ -79,7 +79,7 @@ public class InputManager : DeftInputManager
 
     void OnInputSchemeChanged(InputScheme scheme)
     {
-        eventSystem.enabled = scheme == InputScheme.Menu;
+        //eventSystem.enabled = scheme == InputScheme.Menu;
     }
 
     void LoadInputProfiles()
@@ -110,6 +110,7 @@ public class InputManager : DeftInputManager
         reader.BindAction(PlayerActions.Movement, profile.moveUp, Direction.Up);
         reader.BindAction(PlayerActions.Movement, profile.moveDown, Direction.Down);
         reader.BindAction(PlayerActions.Primary, profile.primary);
+        reader.BindAction(PlayerActions.Start, profile.start);
     }
 
     void SaveInputProfiles()

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using Deft;
 
@@ -15,12 +17,16 @@ namespace Deft.UI
         [System.NonSerialized] public Canvas canvas;
         [System.NonSerialized] public CanvasGroup canvasGroup;
 
-        private Selectable[] selectables;
+        private List<Selectable> selectables;
 
         private void Awake()
         {
             eventVisibilityChanged += OnVisibilityChanged;
-            selectables = GetComponentsInChildren<Selectable>();
+            selectables = GetComponentsInChildren<Selectable>().ToList();
+
+            if (gameObject.GetComponent<Selectable>(out var selectable))
+                selectables.Add(selectable);
+            
             OnAwake();
         }
 
@@ -58,7 +64,7 @@ namespace Deft.UI
 
         public void SelectFirstElement()
         {
-            if (selectables.Length > 0)
+            if (selectables.Count > 0)
                 selectables[0].Select();
         }
 
