@@ -6,4 +6,5 @@ public interface EditorTool
 {
     void OnHover(WorldEditor editor, WorldEditorTile tile);
     void OnClick(WorldEditor editor, WorldEditorTile tile);
+    void Cancel();
 }

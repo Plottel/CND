@@ -23,15 +23,15 @@ public class PlacementTool : EditorTool
             0
         );
 
-        for (int i = 0; i < selectedProp.size.x; i++)
+        for (int row = 0; row < selectedProp.size.x; row++)
         {
-            for (int j = 0; j < selectedProp.size.y; j++)
+            for (int col = 0; col < selectedProp.size.y; col++)
             {
-                var highlightColour = CheckTileValidity(editor.world, tile.pos.x + i, tile.pos.y + j)
+                var highlightColour = CheckTileValidity(editor.world, tile.pos.x + row, tile.pos.y + col)
                     ? WorldEditorTile.TileState.Valid
                     : WorldEditorTile.TileState.Invalid;
 
-                WorldEditorTile editorTile = editor.GetTile(tile.pos.x + i, tile.pos.y + j);
+                WorldEditorTile editorTile = editor.GetTile(tile.pos.x + row, tile.pos.y + col);
                 editorTile.nextState = highlightColour;
                 
                 //if (!editor.areTilesVisible)
@@ -42,25 +42,29 @@ public class PlacementTool : EditorTool
     public void OnClick(WorldEditor editor, WorldEditorTile tile)
     {
         bool canPlace = true;
-        for (int i = 0; i < selectedProp.size.x; i++)
+        for (int row = 0; row < selectedProp.size.x; row++)
         {
-            for (int j = 0; j < selectedProp.size.y; j++)
+            for (int col = 0; col < selectedProp.size.y; col++)
             {
-                canPlace = canPlace && CheckTileValidity(editor.world, tile.pos.x + i, tile.pos.y + j);
+                canPlace = canPlace && CheckTileValidity(editor.world, tile.pos.x + row, tile.pos.y + col);
             }
         }
 
-        Debug.Log("Can place? " + canPlace);
         if (canPlace)
         {
             var sr = selectedProp.GetComponent<SpriteRenderer>();
             sr.sortingOrder = 2;
             sr.enabled = editor.arePropsVisible;
             editor.world.PutProp(selectedProp, tile.pos.x, tile.pos.y);
-            editor.SelectionMode();
+            editor.EnableSelectionMode();
         }
     }
 
+    public void Cancel()
+    {
+        GameObject.Destroy(selectedProp.gameObject);
+    }
+
     private bool CheckTileValidity(World world, int x, int y)
-        => world.GetProp<Prop>(x, y) == null;
+        => world.GetProp(x, y) == null;
 }
