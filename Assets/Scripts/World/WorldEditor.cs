@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class WorldEditor : MonoBehaviour
 {
@@ -14,13 +15,14 @@ public class WorldEditor : MonoBehaviour
 
     public bool arePropsVisible = true;
     public bool areTilesVisible = true;
+    public bool isGridVisible = true;
 
     public GameObject tilePrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        world = new World(worldWidth, worldHeight);
+        world = new World(worldWidth, worldHeight, transform);
 
         tiles = new List<WorldEditorTile>();
         for (int j = 0; j < worldHeight; j++)
@@ -35,7 +37,7 @@ public class WorldEditor : MonoBehaviour
             }
         }
 
-        SelectionMode();
+        EnableSelectionMode();
     }
 
     // Update is called once per frame
@@ -68,6 +70,12 @@ public class WorldEditor : MonoBehaviour
             Camera.main.orthographicSize -= 0.1f;
         }
 
+        if (Keyboard.current.escapeKey.isPressed && tool != null)
+        {
+            tool.Cancel();
+            tool = new SelectionTool();
+        }
+
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         RaycastHit2D hitData = Physics2D.Raycast(mousePos, Vector2.zero);
 
@@ -92,8 +100,22 @@ public class WorldEditor : MonoBehaviour
     public WorldEditorTile GetTile(int x, int y)
         => tiles[y * worldWidth + x];
 
-    public void PlacementMode(GameObject propPrefab)
+    public void Save()
     {
+        world.Serialize(null);
+    }
+
+    public void Load()
+    {
+        world.Deserialize(null);
+    }
+
+
+    // Tooling methods
+    public void EnablePlacementMode(GameObject propPrefab)
+    {
+        //if (tool != null) tool.Cancel();
+
         var prop = Instantiate(propPrefab);
         prop.GetComponent<SpriteRenderer>().sortingOrder = 3;
         tool = new PlacementTool(prop);
@@ -101,12 +123,28 @@ public class WorldEditor : MonoBehaviour
         Debug.Log("Placement mode");
     }
 
-    public void SelectionMode()
+    public void EnableSelectionMode()
     {
+        //if (tool != null) tool.Cancel();
+
         tool = new SelectionTool();
         Debug.Log("Selection mode");
     }
 
+    public void EnableTileMode(Sprite sprite)
+    {
+        //if (tool != null) tool.Cancel();
+
+        var tilePreview = new GameObject();
+        var tileSr = tilePreview.AddComponent<SpriteRenderer>();
+        tileSr.sortingOrder = 1;
+        tileSr.sprite = sprite;
+        tool.OnHover( this, GetTile(0) );
+        tool = new TileTool(tilePreview);
+    }
+
+
+    // Editor Utilities
     public void TogglePropVisibility()
     {
         arePropsVisible = !arePropsVisible;
@@ -117,13 +155,25 @@ public class WorldEditor : MonoBehaviour
     }
     public void ToggleTileVisibility()
     {
+        areTilesVisible = !areTilesVisible;
+
+        for (int i = 0; i < world.tiles.size.x; i++)
+        {
+            for (int j = 0; j < world.tiles.size.y; j++)
+            {
+
+            }
+        }
 
     }
+
     public void ToggleGridVisibility()
     {
+        isGridVisible = !isGridVisible;
         foreach (Transform cell in transform)
         {
-            cell.GetComponent<SpriteRenderer>().enabled = arePropsVisible;
+            if (cell.name != "Grid")
+                cell.GetComponent<SpriteRenderer>().enabled = isGridVisible;
         }
     }
 
