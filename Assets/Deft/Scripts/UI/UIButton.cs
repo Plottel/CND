@@ -12,25 +12,6 @@ namespace Deft.UI
 {
     public class UIButton : Button
     {
-#if UNITY_EDITOR
-        [MenuItem("GameObject/UI/UIButton")]
-        private static void CreateInHierarchy()
-        {
-            var button = new GameObject();
-            button.name = "New UIButton";
-            button.AddComponent<Image>();
-            button.AddComponent<UIButton>();
-            button.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 30);            
-
-            var label = new GameObject().AddComponent<TextMeshProUGUI>();
-            label.gameObject.name = "Label";
-            label.fontSize = 20;
-            label.text = "Text";
-            label.transform.SetParent(button.transform);
-
-        }
-#endif
-
         static readonly ColorBlock defaultColors = new ColorBlock
         {
             normalColor = new Color32(255, 255, 255, 0),

@@ -17,7 +17,6 @@ public class MainMenuPanel : UIPanel
     Button testSceneButton;
     Button enterGameButton;
     Button settingsButton;
-    Button testButton;
 
     protected override void OnAwake()
     {
@@ -30,10 +29,6 @@ public class MainMenuPanel : UIPanel
         testSceneButton.onClick.AddListener(OnTestSceneButtonClicked);
         enterGameButton.onClick.AddListener(OnEnterGameButtonClicked);
         settingsButton.onClick.AddListener(OnSettingsButtonClicked);
-
-        testButton = Find<Button>("TestButton");
-        testButton.onClick.AddListener(() => Debug.Log("Test Click"));
-
     }
 
     protected override void OnStart()
