@@ -27,7 +27,7 @@ public class GameManager : DeftGameManager<GameManager>
 
             case GameState.InGame:
                 InputManager.Get.SetActiveScheme(InputScheme.Gameplay);
-                UIManager.Get.Show<AbilityPanel>();
+                UIManager.Get.Show<DogAbilityPanel>();
                 UIManager.Get.ClearSelected();
                 break;
 

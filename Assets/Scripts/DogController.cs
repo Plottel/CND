@@ -10,18 +10,26 @@ public class DogController : MonoBehaviour
     private void Awake()
     {
         InputManager.Get.eventAxisMoved += OnAxisMoved;
+        InputManager.Get.eventActionPressed += OnActionPressed;
     }
 
     private void OnDestroy()
     {
         InputManager.Get.eventAxisMoved -= OnAxisMoved;
+        InputManager.Get.eventActionPressed -= OnActionPressed;
     }
 
-    void SetDogHeading(Vector2 direction) => target.moveHeading = direction.normalized;
+    public bool ActivateSprint() => target.ActivateSprint();
 
     void OnAxisMoved(int actionID, Vector2 axis)
     {
         if (actionID == PlayerActions.Movement)
-            SetDogHeading(axis);
+            target.Heading = axis;
+    }
+
+    void OnActionPressed(int actionID)
+    {
+        if (actionID == PlayerActions.Primary)
+            ActivateSprint();
     }
 }
