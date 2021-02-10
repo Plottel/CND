@@ -10,6 +10,17 @@ namespace Deft
 {
     public class DeftInputManager : Manager<DeftInputManager>
     {
+        public delegate void MouseButtonHandler(int buttonID, Vector2 pos);
+        public event MouseButtonHandler eventMousePressed;
+        public event MouseButtonHandler eventMouseDown;
+        public event MouseButtonHandler eventMouseReleased;
+
+        protected Keyboard kb;
+        protected Mouse mouse;
+        protected Gamepad gamepad;
+        protected Camera mainCamera;
+        protected EventSystem eventSystem;
+
         public delegate void InputDeviceChangedHandler(InputDeviceType deviceType);
         public event InputDeviceChangedHandler eventInputDeviceChanged;
 
@@ -49,13 +60,23 @@ namespace Deft
 
         public override void OnAwake()
         {
+            kb = Keyboard.current;
+            mouse = Mouse.current;
+            gamepad = Gamepad.current;
+            mainCamera = Camera.main; // TODO(Matt): Remove.
+            eventSystem = EventSystem.current;
+
             inputReaders = new InputReader[2];
-            base.OnAwake();
         }
 
         public override void OnUpdate()
         {
             ChangeActiveInputReaderIfActionDetected();
+
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(mouse.position.ReadValue());
+
+            TriggerMouseEvents(0, mouse.leftButton, mousePos);
+            TriggerMouseEvents(1, mouse.rightButton, mousePos);
 
             if (activeScheme == InputScheme.Gameplay)
             {
@@ -64,13 +85,17 @@ namespace Deft
             }
             else if (activeScheme == InputScheme.Menu)
             {
-                // Process UI Snapshot?
-                //Vector2 navigate = activeReader.ScanNavigate().normalized;
-                //if (navigate != Vector2.zero)
-                //{
-                //    Debug.Log("Navigate:" + navigate.ToString());
-                //    UIManager.Get.InjectNavigate(navigate);
-                //}
+                // TODO(Matt): Does anything need to happen here?
+            }
+        }
+
+        void TriggerMouseEvents(int buttonID, ButtonControl button, Vector2 mousePos)
+        {
+            switch (InputReader.ScanButton(button))
+            {
+                case InputState.Pressed: eventMousePressed?.Invoke(buttonID, mousePos); break;
+                case InputState.Down: eventMouseDown?.Invoke(buttonID, mousePos); break;
+                case InputState.Released: eventMouseReleased?.Invoke(buttonID, mousePos); break;
             }
         }
 

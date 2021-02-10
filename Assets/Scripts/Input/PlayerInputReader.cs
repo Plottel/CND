@@ -120,16 +120,4 @@ public abstract class PlayerInputReader : InputReader
         pressedControl = null;
         return false;
     }
-
-    public InputState ScanButton(ButtonControl button)
-    {
-        if (button.wasPressedThisFrame)
-            return InputState.Pressed;
-        else if (button.wasReleasedThisFrame)
-            return InputState.Released;
-        else if (button.isPressed)
-            return InputState.Down;
-
-        return InputState.None;
-    }
 }

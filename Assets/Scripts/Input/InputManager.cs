@@ -10,11 +10,6 @@ public class InputManager : DeftInputManager
 {
     private string kCustomProfilePath;
 
-    private Keyboard kb;
-    private Mouse mouse;
-    private Gamepad gamepad;
-    private EventSystem eventSystem;
-
     private PlayerMKBInputReader mkbReader;
     private PlayerGamepadInputReader gamepadReader;
 
@@ -28,14 +23,7 @@ public class InputManager : DeftInputManager
     {
         base.OnAwake();
 
-        kCustomProfilePath = Application.persistentDataPath + "/customprofile.input";
-
-        kb = Keyboard.current;
-        mouse = Mouse.current;
-        gamepad = Gamepad.current;
-        eventSystem = EventSystem.current;
-
-        eventInputSchemeChanged += OnInputSchemeChanged;
+        kCustomProfilePath = Application.persistentDataPath + "/customprofile.input";    
 
         LoadInputProfiles();
 
@@ -75,12 +63,7 @@ public class InputManager : DeftInputManager
             Debug.LogError("No Input Reader found");
 
         SetActiveScheme(InputScheme.Menu);
-    }
-
-    void OnInputSchemeChanged(InputScheme scheme)
-    {
-        //eventSystem.enabled = scheme == InputScheme.Menu;
-    }
+    }    
 
     void LoadInputProfiles()
     {

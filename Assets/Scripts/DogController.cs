@@ -20,6 +20,10 @@ public class DogController : MonoBehaviour
     }
 
     public bool ActivateSprint() => target.ActivateSprint();
+    public bool ActivateLunge(Vector3 target) => this.target.ActivateLunge(target);
+
+    public bool CanActivateSprint() => target.CanActivateSprint();
+    public bool CanActivateLunge() => target.CanActivateLunge();
 
     void OnAxisMoved(int actionID, Vector2 axis)
     {

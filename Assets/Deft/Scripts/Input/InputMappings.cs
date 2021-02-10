@@ -30,6 +30,7 @@
             "x",
             "y",
             "z",
+            "space",
             "escape"
         };
 

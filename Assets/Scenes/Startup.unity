@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMkbProfile:
-    primary: leftButton
+    primary: space
     moveLeft: a
     moveRight: d
     moveUp: w
