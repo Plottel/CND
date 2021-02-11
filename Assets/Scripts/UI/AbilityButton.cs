@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Deft;
 using Deft.UI;
+using Deft.Input;
 
 public class AbilityButton : UIButton
 {
     public Image border;
     public Image highlight;
+    public Image hotkey;
+
     public Color32 cooldownHighlight = new Color32(190, 87, 87, 87);
 
     bool isOnCooldown;
@@ -20,6 +23,7 @@ public class AbilityButton : UIButton
         base.Awake();
         border = transform.Find<Image>("Border");
         highlight = transform.Find<Image>("Highlight");
+        hotkey = transform.Find<Image>("Hotkey");
 
         border.enabled = false;
         highlight.enabled = false;

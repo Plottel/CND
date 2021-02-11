@@ -48,6 +48,7 @@ SpriteAtlas:
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 45978d221d7328f46a947fa551de9fc7, type: 3}
   - {fileID: 21300000, guid: ae7c1e43b39272e4f802a8d22b6cc0e0, type: 3}
   - {fileID: 21300000, guid: 822d6183645527140a8e525be0b34bed, type: 3}
   - {fileID: 21300000, guid: b1625004cd2d82f4fb61d96662defcc0, type: 3}
@@ -56,12 +57,13 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8e29dc5f5bfdc5c4f950b603237fa3ae, type: 3}
   - {fileID: 21300000, guid: 468fabdf9fc3a1e42bd8803092a5abc4, type: 3}
   m_PackedSpriteNamesToIndex:
-  - thumb-gamepad-dpad
-  - thumb-gamepad-buttoneast
-  - thumb-gamepad-buttonnorth
-  - thumb-gamepad-buttonwest
-  - thumb-gamepad-leftstick
-  - thumb-gamepad-buttonsouth
-  - thumb-gamepad-rightstick
+  - thumb-space
+  - thumb-dpad
+  - thumb-buttoneast
+  - thumb-buttonnorth
+  - thumb-buttonwest
+  - thumb-leftstick
+  - thumb-buttonsouth
+  - thumb-rightstick
   m_Tag: InputAtlas
   m_IsVariant: 0

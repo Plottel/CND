@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using Deft;
 using Deft.UI;
 using Deft.Input;
@@ -9,7 +10,8 @@ using Deft.Input;
 // TODO(Matt): The targeting here should possibly be offloaded to DogController
 public class DogAbilityPanel : UIPanel
 {
-    public DogController controller;
+    SpriteAtlas inputAtlas;
+    [HideInInspector] public DogController controller;
 
     AbilityButton sprintButton;
     AbilityButton lungeButton;
@@ -18,6 +20,8 @@ public class DogAbilityPanel : UIPanel
 
     protected override void OnAwake()
     {
+        inputAtlas = UIManager.Get.inputAtlas;
+
         sprintButton = Find<AbilityButton>("SprintButton");
         lungeButton = Find<AbilityButton>("LungeButton");
 
@@ -25,14 +29,7 @@ public class DogAbilityPanel : UIPanel
         lungeButton.onClick.AddListener(OnLungeButtonClicked);
     }
 
-    void OnSprintButtonClicked()
-    {
-        if (controller.ActivateSprint())
-        {
-            sprintButton.border.enabled = true;
-            sprintButton.BeginCooldown(controller.target.SprintCooldown);
-        }
-    }
+    void OnSprintButtonClicked() => controller.ActivateSprint();
 
     void OnLungeButtonClicked()
     {
@@ -45,6 +42,8 @@ public class DogAbilityPanel : UIPanel
 
     void OnDogSprintStart()
     {
+        sprintButton.border.enabled = true;
+        sprintButton.BeginCooldown(controller.target.SprintCooldown);
     }
 
     void OnDogSprintEnd() => sprintButton.border.enabled = false;
@@ -65,10 +64,23 @@ public class DogAbilityPanel : UIPanel
         }
     }
 
+    void RefreshHotkeySprites(InputDeviceType deviceType)
+    {
+        var reader = InputManager.Get.GetActiveReader<PlayerInputReader>();
+
+        string sprintControlID = reader.GetControlID(PlayerActions.Primary);
+        string thumbName = string.Concat("thumb-", sprintControlID).ToLower();
+
+        sprintButton.hotkey.sprite = inputAtlas.GetSprite(thumbName);
+    }
+
     protected override void OnVisibilityChanged(bool value)
     {
         if (value)
+        {
+            RefreshHotkeySprites(InputManager.Get.activeDeviceType);
             SubscribeInputEvents();
+        }
         else
             UnsubscribeInputEvents();
     }
@@ -78,6 +90,7 @@ public class DogAbilityPanel : UIPanel
         controller.target.eventSprintStart += OnDogSprintStart;
         controller.target.eventSprintEnd += OnDogSprintEnd;
         InputManager.Get.eventMousePressed += OnMousePressed;
+        InputManager.Get.eventInputDeviceChanged += RefreshHotkeySprites;
     }
 
     void UnsubscribeInputEvents()
@@ -85,5 +98,6 @@ public class DogAbilityPanel : UIPanel
         controller.target.eventSprintStart -= OnDogSprintStart;
         controller.target.eventSprintEnd -= OnDogSprintEnd;
         InputManager.Get.eventMousePressed -= OnMousePressed;
+        InputManager.Get.eventInputDeviceChanged -= RefreshHotkeySprites;
     }
 }

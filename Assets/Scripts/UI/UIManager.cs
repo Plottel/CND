@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using Deft;
 using Deft.UI;
 
@@ -18,6 +19,8 @@ public class UIManager : Manager<UIManager>
 
     private List<UIPanel> panels;
     private UIPanel activeModal;
+
+    public SpriteAtlas inputAtlas;
 
     public override void OnAwake()
     {

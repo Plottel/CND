@@ -37,7 +37,7 @@ namespace Deft
 
         private InputReader[] inputReaders;
         public InputReader activeReader { get; private set; }
-        private InputDeviceType activeDeviceType;
+        public InputDeviceType activeDeviceType { get; private set; }
         public InputScheme activeScheme { get; private set; }
 
         public InputSnapshot inputSnapshot { get; private set; }

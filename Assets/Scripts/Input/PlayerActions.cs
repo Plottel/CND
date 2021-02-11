@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO(Matt): Add Secondary
 public static class PlayerActions
 {
     public const int Movement = 0;
