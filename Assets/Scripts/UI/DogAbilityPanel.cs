@@ -28,7 +28,10 @@ public class DogAbilityPanel : UIPanel
     void OnSprintButtonClicked()
     {
         if (controller.ActivateSprint())
+        {
             sprintButton.border.enabled = true;
+            sprintButton.BeginCooldown(controller.target.SprintCooldown);
+        }
     }
 
     void OnLungeButtonClicked()
@@ -56,6 +59,7 @@ public class DogAbilityPanel : UIPanel
                 {
                     isChoosingLungeTarget = false;
                     lungeButton.border.enabled = false;
+                    lungeButton.BeginCooldown(controller.target.LungeCooldown);
                 }
             }
         }

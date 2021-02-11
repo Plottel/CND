@@ -9,6 +9,11 @@ public class AbilityButton : UIButton
 {
     public Image border;
     public Image highlight;
+    public Color32 cooldownHighlight = new Color32(190, 87, 87, 87);
+
+    bool isOnCooldown;
+    float cooldownStart;
+    float cooldown;
 
     protected override void Awake()
     {
@@ -18,5 +23,39 @@ public class AbilityButton : UIButton
 
         border.enabled = false;
         highlight.enabled = false;
+    }
+
+    private void Update()
+    {
+        if (isOnCooldown)
+        {
+            if (Time.time - cooldownStart > cooldown)
+                EndCooldown();
+            else
+            {
+                float elapsedCooldown = Time.time - cooldownStart;
+                float percentCooldown = elapsedCooldown / cooldown;
+                highlight.fillAmount = 1 - percentCooldown;
+            }
+        }
+    }
+
+    public void BeginCooldown(float duration)
+    {
+        isOnCooldown = true;
+        cooldownStart = Time.time;
+        cooldown = duration;
+        highlight.enabled = true;
+        highlight.color = cooldownHighlight;
+        highlight.fillAmount = 1f;
+    }
+
+    public void EndCooldown()
+    {
+        isOnCooldown = true;
+        cooldownStart = 0f;
+        cooldown = 0f;
+        highlight.enabled = false;
+        highlight.fillAmount = 1f;
     }
 }
