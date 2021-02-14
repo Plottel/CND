@@ -8,17 +8,9 @@ namespace Deft
     {
         public event System.Action eventEnterGame;
         public event System.Action eventExitGame;
+        public event System.Action<bool> eventPause;
 
-        private bool isPaused;
-        public bool IsPaused
-        {
-            get => isPaused;
-            set
-            {
-                isPaused = value;
-                // TODO: Actually pause.. Time scale?
-            }
-        }        
+        public bool IsPaused { get; protected set; }        
 
         public void EnterGame()
         {
@@ -41,6 +33,17 @@ namespace Deft
 
             GameManager.Get.SetState(GameState.MainMenu);
         }
+
+        public void Pause(bool pause)
+        {
+            if (IsPaused != pause)
+            {
+                IsPaused = pause;
+                eventPause?.Invoke(pause);
+            }
+        }
+
+        public void TogglePause() => Pause(!IsPaused);
 
         protected virtual void OnActionPressed(int actionID) { }
         protected virtual void LoadGame() { }

@@ -17,16 +17,10 @@ public class SimulationManager : DeftSimulationManager
     {
         base.OnStart();
         pausePanel = UIManager.Get.GetPanel<PausePanel>();
+        eventPause += OnPause;
     }
 
-    protected override void OnActionPressed(int actionID)
-    {
-        if (actionID == PlayerActions.Start)
-        {
-            IsPaused = !IsPaused;
-            pausePanel.IsVisible = IsPaused;
-        }
-    }
+    void OnPause(bool pause) => pausePanel.IsVisible = !pausePanel.IsVisible;
 
     protected override void LoadGame()
     {

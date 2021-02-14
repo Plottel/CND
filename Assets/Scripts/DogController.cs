@@ -62,6 +62,8 @@ public class DogController : MonoBehaviour
             ActivateSprint();
         else if (actionID == PlayerActions.Secondary)
             BeginChoosingTarget();
+        else if (actionID == PlayerActions.Start)
+            SimulationManager.Get.TogglePause();
     }
 
     void OnMousePressed(int buttonID, Vector2 mousePos)
