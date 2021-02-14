@@ -22,8 +22,8 @@ public class PlayerMKBInputReader : PlayerInputReader
 
         result.SetActionSnapshot(PlayerActions.Movement, GetMovementSnapshot());
         result.SetActionSnapshot(PlayerActions.Primary, GetPrimarySnapshot());
+        result.SetActionSnapshot(PlayerActions.Secondary, GetSecondarySnapshot());
         result.SetActionSnapshot(PlayerActions.Start, GetStartSnapshot());
-
 
         return result;
     }
@@ -48,6 +48,15 @@ public class PlayerMKBInputReader : PlayerInputReader
             actionID = PlayerActions.Primary,
             type = InputType.Button,
             state = ScanButton(primary),
+            axis = Vector2.zero
+        };
+
+    ActionSnapshot GetSecondarySnapshot() =>
+        new ActionSnapshot
+        {
+            actionID = PlayerActions.Secondary,
+            type = InputType.Button,
+            state = ScanButton(secondary),
             axis = Vector2.zero
         };
 

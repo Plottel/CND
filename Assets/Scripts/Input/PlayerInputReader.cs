@@ -12,6 +12,7 @@ public abstract class PlayerInputReader : InputReader
     protected InputDevice device;
 
     public ButtonControl primary;
+    public ButtonControl secondary;
     public KeyboardDpadControl movement;
     public ButtonControl start;
 
@@ -48,30 +49,36 @@ public abstract class PlayerInputReader : InputReader
     {
         if (actionID == PlayerActions.Primary)
             return primary.name;
+        else if (actionID == PlayerActions.Secondary)
+            return secondary.name;
         else if (actionID == PlayerActions.Movement)
             return movement.GetControlID(direction);
         return "";
     }
 
-    public void BindAxis(int actionID, string axisRootID)
-    {
-        if (actionID == PlayerActions.Primary)
-            primary = Find<ButtonControl>(axisRootID);
-        else if (actionID == PlayerActions.Movement)
-        {
-            movement.BindControl(Find<ButtonControl>(axisRootID + "/left"), Direction.Left);
-            movement.BindControl(Find<ButtonControl>(axisRootID + "/right"), Direction.Right);
-            movement.BindControl(Find<ButtonControl>(axisRootID + "/up"), Direction.Up);
-            movement.BindControl(Find<ButtonControl>(axisRootID + "/down"), Direction.Down);
-        }
+    //public void BindAxis(int actionID, string axisRootID)
+    //{
+    //    if (actionID == PlayerActions.Primary)
+    //        primary = Find<ButtonControl>(axisRootID);
+    //    else if (actionID == PlayerActions.Secondary)
+    //        secondary = Find<ButtonControl>(axisRootID);
+    //    else if (actionID == PlayerActions.Movement)
+    //    {
+    //        movement.BindControl(Find<ButtonControl>(axisRootID + "/left"), Direction.Left);
+    //        movement.BindControl(Find<ButtonControl>(axisRootID + "/right"), Direction.Right);
+    //        movement.BindControl(Find<ButtonControl>(axisRootID + "/up"), Direction.Up);
+    //        movement.BindControl(Find<ButtonControl>(axisRootID + "/down"), Direction.Down);
+    //    }
 
-        RefreshActionControls();
-    }
+    //    RefreshActionControls();
+    //}
 
     public void BindAction(int actionID, string controlID, Direction direction = Direction.None)
     {
         if (actionID == PlayerActions.Primary)
             primary = Find<ButtonControl>(controlID);
+        else if (actionID == PlayerActions.Secondary)
+            secondary = Find<ButtonControl>(controlID);
         else if (actionID == PlayerActions.Movement)
             movement.BindControl(Find<ButtonControl>(controlID), direction);
         else if (actionID == PlayerActions.Start)
@@ -85,6 +92,7 @@ public abstract class PlayerInputReader : InputReader
         actionControls = new List<ButtonControl>
         {
             primary,
+            secondary,
             movement.left,
             movement.right,
             movement.up,

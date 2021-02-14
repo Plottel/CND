@@ -228,13 +228,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMkbProfile:
     primary: space
+    secondary: q
     moveLeft: a
     moveRight: d
     moveUp: w
     moveDown: s
     start: escape
   defaultGamepadProfile:
-    primary: buttonSouth
+    primary: buttonWest
+    secondary: buttonSouth
     moveLeft: leftStick/left
     moveRight: leftStick/right
     moveUp: leftStick/up

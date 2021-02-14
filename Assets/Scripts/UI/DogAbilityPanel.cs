@@ -31,47 +31,39 @@ public class DogAbilityPanel : UIPanel
 
     void OnSprintButtonClicked() => controller.ActivateSprint();
 
-    void OnLungeButtonClicked()
-    {
-        if (controller.CanActivateLunge())
-        {
-            isChoosingLungeTarget = true;
-            lungeButton.border.enabled = true;
-        }
-    }
+    void OnLungeButtonClicked() => controller.BeginChoosingTarget();
 
-    void OnDogSprintStart()
+    void OnChooseTargetChanged(bool value) => lungeButton.border.enabled = value;
+
+    void OnSprintStart()
     {
         sprintButton.border.enabled = true;
         sprintButton.BeginCooldown(controller.target.SprintCooldown);
     }
 
-    void OnDogSprintEnd() => sprintButton.border.enabled = false;
+    void OnSprintEnd() => sprintButton.border.enabled = false;
 
-    void OnMousePressed(int buttonID, Vector2 mousePos)
+    void OnLungeStart()
     {
-        if (buttonID == 0)
-        {
-            if (isChoosingLungeTarget)
-            {
-                if (controller.ActivateLunge(mousePos))
-                {
-                    isChoosingLungeTarget = false;
-                    lungeButton.border.enabled = false;
-                    lungeButton.BeginCooldown(controller.target.LungeCooldown);
-                }
-            }
-        }
+        lungeButton.border.enabled = false;
+        lungeButton.BeginCooldown(controller.target.LungeCooldown);
     }
+
+    void OnLungeEnd() => lungeButton.border.enabled = false;
 
     void RefreshHotkeySprites(InputDeviceType deviceType)
     {
         var reader = InputManager.Get.GetActiveReader<PlayerInputReader>();
 
         string sprintControlID = reader.GetControlID(PlayerActions.Primary);
-        string thumbName = string.Concat("thumb-", sprintControlID).ToLower();
+        string sprintThumbName = string.Concat("thumb-", sprintControlID).ToLower();
 
-        sprintButton.hotkey.sprite = inputAtlas.GetSprite(thumbName);
+        sprintButton.hotkey.sprite = inputAtlas.GetSprite(sprintThumbName);
+
+        string lungeControlID = reader.GetControlID(PlayerActions.Secondary);
+        string lungeThumbName = string.Concat("thumb-", lungeControlID).ToLower();
+
+        lungeButton.hotkey.sprite = inputAtlas.GetSprite(lungeThumbName);
     }
 
     protected override void OnVisibilityChanged(bool value)
@@ -87,17 +79,21 @@ public class DogAbilityPanel : UIPanel
 
     void SubscribeInputEvents()
     {
-        controller.target.eventSprintStart += OnDogSprintStart;
-        controller.target.eventSprintEnd += OnDogSprintEnd;
-        InputManager.Get.eventMousePressed += OnMousePressed;
+        controller.target.eventSprintStart += OnSprintStart;
+        controller.target.eventSprintEnd += OnSprintEnd;
+        controller.target.eventLungeStart += OnLungeStart;
+        controller.target.eventLungeEnd += OnLungeEnd;
+        controller.eventIsChoosingTargetChanged += OnChooseTargetChanged;
         InputManager.Get.eventInputDeviceChanged += RefreshHotkeySprites;
     }
 
     void UnsubscribeInputEvents()
     {
-        controller.target.eventSprintStart -= OnDogSprintStart;
-        controller.target.eventSprintEnd -= OnDogSprintEnd;
-        InputManager.Get.eventMousePressed -= OnMousePressed;
+        controller.target.eventSprintStart -= OnSprintStart;
+        controller.target.eventSprintEnd -= OnSprintEnd;
+        controller.target.eventLungeStart -= OnLungeStart;
+        controller.target.eventLungeEnd -= OnLungeEnd;
+        controller.eventIsChoosingTargetChanged -= OnChooseTargetChanged;
         InputManager.Get.eventInputDeviceChanged -= RefreshHotkeySprites;
     }
 }

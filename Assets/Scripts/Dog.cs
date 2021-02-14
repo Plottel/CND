@@ -95,6 +95,7 @@ public class Dog : Prop
     }
 
     // TODO(Matt): Investigate coroutines on destroyed objects - OnDestroy->StopAllCoroutines?
+    // Is this over-engineering?
     IEnumerator DeactiveSprintAfterDuration()
     {
         while (TimeSince(lastSprintActivation) < SprintDuration)
