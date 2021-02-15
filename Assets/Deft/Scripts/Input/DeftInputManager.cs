@@ -63,10 +63,14 @@ namespace Deft
             kb = Keyboard.current;
             mouse = Mouse.current;
             gamepad = Gamepad.current;
-            mainCamera = Camera.main; // TODO(Matt): Remove.
             eventSystem = EventSystem.current;
 
             inputReaders = new InputReader[2];
+        }
+
+        public override void OnStart()
+        {
+            mainCamera = CameraManager.Get.MainCamera;
         }
 
         public override void OnUpdate()
