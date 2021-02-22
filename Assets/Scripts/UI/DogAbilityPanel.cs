@@ -29,24 +29,28 @@ public class DogAbilityPanel : UIPanel
         lungeButton.onClick.AddListener(OnLungeButtonClicked);
     }
 
-    void OnSprintButtonClicked() => controller.ActivateSprint();
+    void OnSprintButtonClicked() => controller.UseAbility(PlayerActions.Primary);
 
-    void OnLungeButtonClicked() => controller.BeginChoosingTarget();
-
-    void OnChooseTargetChanged(bool value) => lungeButton.border.enabled = value;
+    void OnLungeButtonClicked() => controller.BeginChoosingTarget(PlayerActions.Secondary);
 
     void OnSprintStart()
     {
         sprintButton.border.enabled = true;
-        sprintButton.BeginCooldown(controller.target.SprintCooldown);
+
+        // TOOD(Matt): Refactor for Live cooldown fetching
+        float remainingCooldown = controller.target.GetAbility(PlayerActions.Primary).RemainingCooldown;
+        sprintButton.BeginCooldown(remainingCooldown);
     }
 
     void OnSprintEnd() => sprintButton.border.enabled = false;
 
     void OnLungeStart()
     {
-        lungeButton.border.enabled = false;
-        lungeButton.BeginCooldown(controller.target.LungeCooldown);
+        lungeButton.border.enabled = true;
+
+        // TOOD(Matt): Refactor for Live cooldown fetching
+        float remainingCooldown = controller.target.GetAbility(PlayerActions.Secondary).RemainingCooldown;
+        lungeButton.BeginCooldown(remainingCooldown);
     }
 
     void OnLungeEnd() => lungeButton.border.enabled = false;
@@ -79,21 +83,19 @@ public class DogAbilityPanel : UIPanel
 
     void SubscribeInputEvents()
     {
-        controller.target.eventSprintStart += OnSprintStart;
-        controller.target.eventSprintEnd += OnSprintEnd;
-        controller.target.eventLungeStart += OnLungeStart;
-        controller.target.eventLungeEnd += OnLungeEnd;
-        controller.eventIsChoosingTargetChanged += OnChooseTargetChanged;
+        controller.target.GetAbility(PlayerActions.Primary).eventUse += OnSprintStart;
+        controller.target.GetAbility(PlayerActions.Primary).eventEndUse += OnSprintEnd;
+        controller.target.GetAbility(PlayerActions.Secondary).eventUse += OnLungeStart;
+        controller.target.GetAbility(PlayerActions.Secondary).eventEndUse += OnLungeEnd;
         InputManager.Get.eventInputDeviceChanged += RefreshHotkeySprites;
     }
 
     void UnsubscribeInputEvents()
     {
-        controller.target.eventSprintStart -= OnSprintStart;
-        controller.target.eventSprintEnd -= OnSprintEnd;
-        controller.target.eventLungeStart -= OnLungeStart;
-        controller.target.eventLungeEnd -= OnLungeEnd;
-        controller.eventIsChoosingTargetChanged -= OnChooseTargetChanged;
+        controller.target.GetAbility(PlayerActions.Primary).eventUse -= OnSprintStart;
+        controller.target.GetAbility(PlayerActions.Primary).eventEndUse -= OnSprintEnd;
+        controller.target.GetAbility(PlayerActions.Secondary).eventUse -= OnLungeStart;
+        controller.target.GetAbility(PlayerActions.Secondary).eventEndUse -= OnLungeEnd;
         InputManager.Get.eventInputDeviceChanged -= RefreshHotkeySprites;
     }
 }

@@ -5,11 +5,12 @@ using Deft;
 
 public class DogController : MonoBehaviour
 {
-    public delegate void ChooseTargetChangedHandler(bool value);
+    public delegate void ChooseTargetChangedHandler(bool value, int abilityIndex);
     public event ChooseTargetChangedHandler eventIsChoosingTargetChanged;
 
     public Dog target;
 
+    int targetAbilityIndex;
     bool isChoosingTarget;
     public bool IsChoosingTarget 
     {
@@ -19,7 +20,7 @@ public class DogController : MonoBehaviour
             if (value != isChoosingTarget)
             {
                 isChoosingTarget = value;
-                eventIsChoosingTargetChanged?.Invoke(isChoosingTarget);
+                eventIsChoosingTargetChanged?.Invoke(isChoosingTarget, targetAbilityIndex);
             }
         }
     }
@@ -38,15 +39,17 @@ public class DogController : MonoBehaviour
         InputManager.Get.eventMousePressed -= OnMousePressed;
     }
 
-    public bool ActivateSprint() => target.ActivateSprint();
-    public bool ActivateLunge(Vector3 target) => this.target.ActivateLunge(target);
-
-    public bool CanActivateSprint() => target.CanActivateSprint();
-    public bool CanActivateLunge() => target.CanActivateLunge();
-
-    public bool BeginChoosingTarget()
+    public bool UseAbility(int abilityIndex) => target.UseAbility(abilityIndex);
+    public bool UseAbility(int abilityIndex, Vector3 targetPosition)
     {
-        IsChoosingTarget = CanActivateLunge();
+        target.GetAbility(abilityIndex).targetPosition = targetPosition;
+        return target.UseAbility(abilityIndex);
+    }
+
+    public bool BeginChoosingTarget(int abilityIndex)
+    {
+        targetAbilityIndex = abilityIndex;
+        IsChoosingTarget = target.GetAbility(abilityIndex).IsReady;
         return IsChoosingTarget;
     }
 
@@ -59,9 +62,9 @@ public class DogController : MonoBehaviour
     void OnActionPressed(int actionID)
     {
         if (actionID == PlayerActions.Primary)
-            ActivateSprint();
+            target.UseAbility(PlayerActions.Primary);
         else if (actionID == PlayerActions.Secondary)
-            BeginChoosingTarget();
+            BeginChoosingTarget(PlayerActions.Secondary);
         else if (actionID == PlayerActions.Start)
             SimulationManager.Get.TogglePause();
     }
@@ -70,7 +73,7 @@ public class DogController : MonoBehaviour
     {
         if (buttonID == 0)
         {
-            if (isChoosingTarget && ActivateLunge(mousePos))
+            if (isChoosingTarget && UseAbility(targetAbilityIndex))
                 isChoosingTarget = false;
         }
     }
