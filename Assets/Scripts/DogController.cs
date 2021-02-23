@@ -15,7 +15,7 @@ public class DogController : MonoBehaviour
     LungeAbility lunge;
     PauseAbility pause;
 
-    int targetAbilityIndex;
+    int abilityChoice;
     bool isChoosingTarget;
     public bool IsChoosingTarget 
     {
@@ -25,7 +25,7 @@ public class DogController : MonoBehaviour
             if (value != isChoosingTarget)
             {
                 isChoosingTarget = value;
-                eventIsChoosingTargetChanged?.Invoke(isChoosingTarget, targetAbilityIndex);
+                eventIsChoosingTargetChanged?.Invoke(isChoosingTarget, abilityChoice);
             }
         }
     }
@@ -61,7 +61,7 @@ public class DogController : MonoBehaviour
 
     public bool BeginChoosingTarget(int abilityIndex)
     {
-        targetAbilityIndex = abilityIndex;
+        abilityChoice = abilityIndex;
         IsChoosingTarget = target.GetAbility(abilityIndex).IsReady;
         return IsChoosingTarget;
     }
@@ -93,7 +93,7 @@ public class DogController : MonoBehaviour
     {
         if (buttonID == 0)
         {
-            if (isChoosingTarget && target.TryUseAbility(targetAbilityIndex))
+            if (isChoosingTarget && target.TryUseAbility(abilityChoice))
                 isChoosingTarget = false;
         }
     }
