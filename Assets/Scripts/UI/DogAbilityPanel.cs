@@ -39,7 +39,7 @@ public class DogAbilityPanel : UIPanel
         lungeButton.SetAbility(controller.target.GetAbility(PlayerActions.Secondary));
     }
 
-    void OnSprintButtonClicked() => controller.UseAbility(PlayerActions.Primary);
+    void OnSprintButtonClicked() => controller.TryUseAbility(PlayerActions.Primary);
     void OnLungeButtonClicked() => controller.BeginChoosingTarget(PlayerActions.Secondary);
 
     void RefreshInputSprites(InputDeviceType deviceType)

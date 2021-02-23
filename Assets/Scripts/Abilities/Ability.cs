@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetStyle
+public enum AbilityStyle
 {
     Simple,
-    Position
+    PositionTarget
 }
 
 public class Ability : MonoBehaviour
@@ -16,7 +16,7 @@ public class Ability : MonoBehaviour
     [HideInInspector] public Entity entity;
     [HideInInspector] public Vector3 targetPosition;
 
-    public TargetStyle targetStyle;
+    public AbilityStyle style;
     public float Cooldown;
     protected float lastUse;
 

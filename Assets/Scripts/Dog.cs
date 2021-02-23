@@ -7,35 +7,24 @@ using Deft;
 
 public class Dog : Entity
 {
-    SprintAbility sprint;
-    LungeAbility lunge;
+    Ability[] abilities;
 
     protected override void Awake()
     {
         base.Awake();
 
-        sprint = GetComponent<SprintAbility>();
-        lunge = GetComponent<LungeAbility>();
+        abilities = new Ability[PlayerActions.Count];
+        abilities[PlayerActions.Movement] = GetComponent<MoveAbility>();
+        abilities[PlayerActions.Primary] = GetComponent<SprintAbility>();
+        abilities[PlayerActions.Secondary] = GetComponent<LungeAbility>();
+        abilities[PlayerActions.Start] = GetComponent<PauseAbility>();
 
-        sprint.entity = this;
-        lunge.entity = this;
+        foreach (var ability in abilities)
+            ability.entity = this;
     }
 
-    public Ability GetAbility(int index)
-    {
-        if (index == 1)
-            return sprint;
-        else if (index == 2)
-            return lunge;
-        return null;
-    }
+    public Ability GetAbility(int index) => abilities[index];
+    public T GetAbility<T>(int index) where T : Ability => abilities[index] as T;
 
-    public bool UseAbility(int index)
-    {
-        if (index == 1)
-            return sprint.Use();
-        else if (index == 2)
-            return lunge.Use();
-        return false;
-    }
+    public bool TryUseAbility(int index) => abilities[index].Use();
 }

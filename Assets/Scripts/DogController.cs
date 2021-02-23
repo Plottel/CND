@@ -8,7 +8,12 @@ public class DogController : MonoBehaviour
     public delegate void ChooseTargetChangedHandler(bool value, int abilityIndex);
     public event ChooseTargetChangedHandler eventIsChoosingTargetChanged;
 
-    public Dog target;
+    public Dog target { get; private set; }
+
+    MoveAbility movement;
+    SprintAbility sprint;
+    LungeAbility lunge;
+    PauseAbility pause;
 
     int targetAbilityIndex;
     bool isChoosingTarget;
@@ -25,6 +30,19 @@ public class DogController : MonoBehaviour
         }
     }
 
+    public void SetTarget(Dog newTarget)
+    {
+        target = newTarget;
+
+        if (target == null)
+            return;
+
+        movement = target.GetAbility<MoveAbility>(PlayerActions.Movement);
+        sprint = target.GetAbility<SprintAbility>(PlayerActions.Primary);
+        lunge = target.GetAbility<LungeAbility>(PlayerActions.Secondary);
+        pause = target.GetAbility<PauseAbility>(PlayerActions.Start);
+    }
+
     private void Awake()
     {
         InputManager.Get.eventAxisMoved += OnAxisMoved;
@@ -39,12 +57,7 @@ public class DogController : MonoBehaviour
         InputManager.Get.eventMousePressed -= OnMousePressed;
     }
 
-    public bool UseAbility(int abilityIndex) => target.UseAbility(abilityIndex);
-    public bool UseAbility(int abilityIndex, Vector3 targetPosition)
-    {
-        target.GetAbility(abilityIndex).targetPosition = targetPosition;
-        return target.UseAbility(abilityIndex);
-    }
+    public bool TryUseAbility(int abilityIndex) => target.TryUseAbility(abilityIndex);
 
     public bool BeginChoosingTarget(int abilityIndex)
     {
@@ -56,24 +69,31 @@ public class DogController : MonoBehaviour
     void OnAxisMoved(int actionID, Vector2 axis)
     {
         if (actionID == PlayerActions.Movement)
-            target.Heading = axis;
+        {
+            movement.direction = axis;
+            target.TryUseAbility(PlayerActions.Movement);
+        }
     }
 
     void OnActionPressed(int actionID)
     {
-        if (actionID == PlayerActions.Primary)
-            target.UseAbility(PlayerActions.Primary);
-        else if (actionID == PlayerActions.Secondary)
-            BeginChoosingTarget(PlayerActions.Secondary);
-        else if (actionID == PlayerActions.Start)
-            SimulationManager.Get.TogglePause();
+        switch (target.GetAbility(actionID).style)
+        {
+            case AbilityStyle.Simple:
+                target.TryUseAbility(actionID);
+                break;
+
+            case AbilityStyle.PositionTarget:
+                BeginChoosingTarget(actionID);
+                break;
+        }
     }
 
     void OnMousePressed(int buttonID, Vector2 mousePos)
     {
         if (buttonID == 0)
         {
-            if (isChoosingTarget && UseAbility(targetAbilityIndex))
+            if (isChoosingTarget && target.TryUseAbility(targetAbilityIndex))
                 isChoosingTarget = false;
         }
     }

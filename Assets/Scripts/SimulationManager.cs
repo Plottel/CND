@@ -26,7 +26,7 @@ public class SimulationManager : DeftSimulationManager
     {
         dog = Instantiate(DogPrefab);
         controller = new GameObject().AddComponent<DogController>();
-        controller.target = dog;
+        controller.SetTarget(dog);
         UIManager.Get.GetPanel<DogAbilityPanel>().SetController(controller);
     }
 
