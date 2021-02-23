@@ -27,7 +27,7 @@ public class SimulationManager : DeftSimulationManager
         dog = Instantiate(DogPrefab);
         controller = new GameObject().AddComponent<DogController>();
         controller.target = dog;
-        UIManager.Get.GetPanel<DogAbilityPanel>().controller = controller;
+        UIManager.Get.GetPanel<DogAbilityPanel>().SetController(controller);
     }
 
     protected override void UnloadGame()
@@ -37,6 +37,6 @@ public class SimulationManager : DeftSimulationManager
 
         dog = null;
         controller = null;
-        UIManager.Get.GetPanel<DogAbilityPanel>().controller = null;
+        UIManager.Get.GetPanel<DogAbilityPanel>().SetController(null);
     }
 }

@@ -1,13 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using Deft;
 using Deft.UI;
 using Deft.Input;
 
 public class AbilityButton : UIButton
 {
+    public Ability ability { get; private set; }
+
     public Image border;
     public Image highlight;
     public Image hotkey;
@@ -15,8 +19,6 @@ public class AbilityButton : UIButton
     public Color32 cooldownHighlight = new Color32(190, 87, 87, 87);
 
     bool isOnCooldown;
-    float cooldownStart;
-    float cooldown;
 
     protected override void Awake()
     {
@@ -29,37 +31,59 @@ public class AbilityButton : UIButton
         highlight.enabled = false;
     }
 
+    public void SetAbility(Ability newAbility)
+    {
+        if (ability != null)
+        {
+            ability.eventUse -= OnAbilityUse;
+            ability.eventEndUse -= OnAbilityEndUse;
+        }
+
+        ability = newAbility;
+        newAbility.eventUse += OnAbilityUse;
+        newAbility.eventEndUse += OnAbilityEndUse;
+    }    
+
     private void Update()
     {
         if (isOnCooldown)
         {
-            if (Time.time - cooldownStart > cooldown)
-                EndCooldown();
+            if (ability.RemainingCooldown > 0f)
+                UpdateCooldown();
             else
-            {
-                float elapsedCooldown = Time.time - cooldownStart;
-                float percentCooldown = elapsedCooldown / cooldown;
-                highlight.fillAmount = 1 - percentCooldown;
-            }
+                EndCooldown();
         }
     }
 
-    public void BeginCooldown(float duration)
+    void OnAbilityUse()
+    {
+        border.enabled = true;
+    }
+
+    void OnAbilityEndUse()
+    {
+        border.enabled = false;
+        BeginCooldown();
+    }
+
+    void BeginCooldown()
     {
         isOnCooldown = true;
-        cooldownStart = Time.time;
-        cooldown = duration;
         highlight.enabled = true;
         highlight.color = cooldownHighlight;
         highlight.fillAmount = 1f;
     }
 
-    public void EndCooldown()
+    void EndCooldown()
     {
-        isOnCooldown = true;
-        cooldownStart = 0f;
-        cooldown = 0f;
+        isOnCooldown = false;
         highlight.enabled = false;
         highlight.fillAmount = 1f;
+    }
+
+    void UpdateCooldown()
+    {
+        float remainingPcnt = ability.RemainingCooldown / ability.Cooldown;
+        highlight.fillAmount = remainingPcnt;
     }
 }
